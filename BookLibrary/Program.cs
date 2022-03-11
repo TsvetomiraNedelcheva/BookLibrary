@@ -1,5 +1,5 @@
 using BookLibrary.Core.Constants;
-using BookLibrary.Data;
+using BookLibrary.Infrastructure.Data;
 using BookLibrary.ModelBinders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
