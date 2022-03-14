@@ -8,7 +8,7 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IApplicationDbRepository, IApplicationDbRepository>();
+        services.AddScoped<IApplicationDbRepository, ApplicatioDbRepository>();
         return services;
     }
 
