@@ -1,0 +1,47 @@
+﻿@model AddBookFormModel
+@{
+    ViewData["Title"] = "Add Book";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <h2 class="heading-margin text-center">Add Book</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter title here">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter description of the book here" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageUrl"></label>
+                    <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url of the book cover here">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Authors"></label>
+                    <input asp-for="Authors" class="form-control" placeholder="Enter authors' names here">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Pages"></label>
+                    <input asp-for="Pages" class="form-control" type="number" placeholder="Enter number of pages here">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Publisher"></label>
+                    <input asp-for="Publisher" class="form-control" placeholder="Enter publisher name here">
+                </div>
+                <div class="form-group">
+                    <label asp-for="GenreId"></label>
+                    <select multiple class="form-control" asp-for="GenreId">
+                        @foreach(var genre in Model.Genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
+                    </select>
+                </div>
+                <input class="btn btn-primary float-right btn-margin" type="submit" value="Save" />
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,4 @@
-﻿using BookLibrary.Core.Constants;
-using BookLibrary.Models;
+﻿using BookLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,11 +14,6 @@ namespace BookLibrary.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
