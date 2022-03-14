@@ -1,5 +1,6 @@
 using BookLibrary.Core.Constants;
 using BookLibrary.Infrastructure.Data;
+using BookLibrary.Infrastructure.Data.Repositories;
 using BookLibrary.ModelBinders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,8 @@ builder.Services.AddControllersWithViews()
         options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(FormattingConstant.NormalDateFormat));
         options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
     });
+
+builder.Services.AddScoped<IApplicationDbRepository, IApplicationDbRepository>();
 
 var app = builder.Build();
 
