@@ -1,5 +1,4 @@
 using BookLibrary.Core.Constants;
-using BookLibrary.Extensions;
 using BookLibrary.Infrastructure.Data;
 using BookLibrary.ModelBinders;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +21,6 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
-app.PrepareDatabase();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

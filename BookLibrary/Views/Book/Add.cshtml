@@ -1,4 +1,5 @@
-﻿@model AddBookFormModel
+﻿@using BookLibrary.Infrastructure.Data.Models.Enums
+@model AddBookFormModel
 @{
     ViewData["Title"] = "Add Book";
 }
@@ -32,12 +33,8 @@
                     <input asp-for="Publisher" class="form-control" placeholder="Enter publisher name here">
                 </div>
                 <div class="form-group">
-                    <label asp-for="GenreId"></label>
-                    <select multiple class="form-control" asp-for="GenreId">
-                        @foreach(var genre in Model.Genres)
-                        {
-                            <option value="@genre.Id">@genre.Name</option>
-                        }
+                    <label asp-for="Genres"></label>
+                    <select multiple class="form-control" asp-for="Genres" asp-items="@Html.GetEnumSelectList<GenreType>()">
                     </select>
                 </div>
                 <input class="btn btn-primary float-right btn-margin" type="submit" value="Save" />

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BookLibrary.Infrastructure.Data.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookLibrary.Models.Books
 {
@@ -12,9 +13,6 @@ namespace BookLibrary.Models.Books
         public string ImageUrl { get; set; }
         public string Publisher { get; set; }
         public string Authors { get; set; }
-
-        [Display(Name = "Genre")]
-        public string GenreId { get; set; }
-        public IEnumerable<BookGenreViewModel> Genres { get; set; }
+        public IEnumerable<GenreType> Genres { get; set; }
     }
 }

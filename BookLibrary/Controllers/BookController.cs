@@ -11,22 +11,12 @@ namespace BookLibrary.Controllers
         {
             data = _data;
         }
-        public IActionResult Add() => View(new AddBookFormModel
-        {
-            Genres = this.GetGenres()
-        });
+        public IActionResult Add() => View();
 
         [HttpPost]
         public IActionResult Add(AddBookFormModel book)
         {
             return View();
         }
-        private IEnumerable<BookGenreViewModel> GetGenres()
-        => data.Genres.Select(g => new BookGenreViewModel
-        {
-            Id = g.Id,
-            Name = g.Name
-        })
-         .ToList();
     }
 }
