@@ -21,8 +21,7 @@ namespace BookLibrary.Models.Books
         public int Pages { get; set; }
 
         [Required]
-        [Url]
-        [Display(Name = "Image URL")]
+        [Display(Name = "Image Link")]
         public string ImageUrl { get; set; }
 
         [Required]

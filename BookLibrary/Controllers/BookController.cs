@@ -1,5 +1,6 @@
 ﻿using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 using BookLibrary.Models.Books;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -59,6 +60,42 @@ namespace BookLibrary.Controllers
 
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult All(string searchTerm, string genre)
+        {
+            var bookQuery = this.data.Books.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                bookQuery = bookQuery.Where(b => b.Title.ToLower().Contains(searchTerm.ToLower()));
+            }
+            var books = bookQuery
+                .OrderByDescending(b  => b.Id)
+                .Select(b => new AllBooksViewModel
+                {
+                    Title = b.Title,
+                    ImageUrl = b.ImageUrl,
+                    //Authors = (IEnumerable<AuthorImagesViewModel>)b.Authors,
+                    //Genres = (ICollection<GenreType>)b.Genres
+                })
+                .ToList();
+
+            if (!string.IsNullOrWhiteSpace(genre))
+            {
+                bookQuery = bookQuery.Where(b => b.Genres.Select(g => g.Name).ToString() == genre);
+            }
+
+            var bookGenres = data
+                .Genres
+                .Select(g => g.Name.ToString()) //enum is int by default and can't cast it to string
+                .ToList();
+
+            return View(new BookSearchViewModel
+            {
+                GenreTypes = bookGenres,
+                Books = books,
+                SearchTerm = searchTerm
+            });
         }
     }
 }

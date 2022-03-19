@@ -10,7 +10,6 @@ namespace BookLibrary.Models.Books
 
         [Required]
         [MinLength(1)]
-        [Url]
         public string AuthorImageUrl { get; set; }
     }
 }
