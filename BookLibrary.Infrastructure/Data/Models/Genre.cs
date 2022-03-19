@@ -16,7 +16,6 @@ namespace BookLibrary.Infrastructure.Data.Models
         [Key]
         public string Id { get; set; }
 
-        [StringLength(MaxGenreNameLength)]
         [Required]
         public GenreType Name { get; set; }
         public ICollection<Book> Books { get; set; }
