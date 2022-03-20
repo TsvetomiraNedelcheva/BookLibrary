@@ -1,9 +1,7 @@
 ﻿using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
-using BookLibrary.Infrastructure.Data.Models.Enums;
 using BookLibrary.Models.Books;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace BookLibrary.Controllers
 {
@@ -62,14 +60,19 @@ namespace BookLibrary.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult All(string searchTerm, string genre)
+        public IActionResult All([FromQuery]AllBooksQueryModel query)
         {
             var bookQuery = this.data.Books.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+
+            var totalBooks = bookQuery.Count();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                bookQuery = bookQuery.Where(b => b.Title.ToLower().Contains(searchTerm.ToLower()));
+                bookQuery = bookQuery.Where(b => b.Title.ToLower().Contains(query.SearchTerm.ToLower()));
             }
             var books = bookQuery
+                .Skip((query.CurrentPage - 1) * AllBooksQueryModel.BooksPerPage)
+                .Take(AllBooksQueryModel.BooksPerPage)
                 .OrderByDescending(b  => b.Id)
                 .Select(b => new AllBooksViewModel
                 {
@@ -80,22 +83,22 @@ namespace BookLibrary.Controllers
                 })
                 .ToList();
 
-            if (!string.IsNullOrWhiteSpace(genre))
-            {
-                bookQuery = bookQuery.Where(b => b.Genres.Select(g => g.Name).ToString() == genre);
-            }
+            //if (!string.IsNullOrWhiteSpace(genre))
+            //{
+            //    bookQuery = bookQuery.Where(b => b.Genres.Select(g => g.Name).ToString() == genre);
+            //}
 
-            var bookGenres = data
-                .Genres
-                .Select(g => g.Name.ToString()) //enum is int by default and can't cast it to string
-                .ToList();
+            //var bookGenres = data
+            //    .Genres
+            //    .Select(g => g.Name.ToString()) 
+            //    .ToList();
 
-            return View(new BookSearchViewModel
-            {
-                GenreTypes = bookGenres,
-                Books = books,
-                SearchTerm = searchTerm
-            });
+            // GenreTypes = bookGenres;
+            // SearchTerm = query.SearchTerm
+            query.TotalBooks = totalBooks;
+            query.Books = books;
+
+            return View(query);
         }
     }
 }
