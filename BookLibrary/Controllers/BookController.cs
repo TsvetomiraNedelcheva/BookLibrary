@@ -1,4 +1,5 @@
-﻿using BookLibrary.Infrastructure.Data;
+﻿using BookLibrary.Core.Services;
+using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Models.Books;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,11 @@ namespace BookLibrary.Controllers
     public class BookController : Controller
     {
         private readonly ApplicationDbContext data;
-        public BookController(ApplicationDbContext _data)
+        private readonly IBookService bookService;
+        public BookController(ApplicationDbContext _data, IBookService _bookService)
         {
             data = _data;
+            bookService = _bookService;
         }
         public IActionResult Add() => View();
 
@@ -62,41 +65,15 @@ namespace BookLibrary.Controllers
 
         public IActionResult All([FromQuery]AllBooksQueryModel query)
         {
-            var bookQuery = this.data.Books.AsQueryable();
+            var books = bookService.All(query.SearchTerm, query.CurrentPage, AllBooksQueryModel.BooksPerPage);
 
-            var totalBooks = bookQuery.Count();
-
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            query.TotalBooks = books.TotalBooks;
+            query.Books = books.Books.Select(b => new AllBooksViewModel
             {
-                bookQuery = bookQuery.Where(b => b.Title.ToLower().Contains(query.SearchTerm.ToLower()));
-            }
-            var books = bookQuery
-                .Skip((query.CurrentPage - 1) * AllBooksQueryModel.BooksPerPage)
-                .Take(AllBooksQueryModel.BooksPerPage)
-                .OrderByDescending(b  => b.Id)
-                .Select(b => new AllBooksViewModel
-                {
-                    Title = b.Title,
-                    ImageUrl = b.ImageUrl,
-                    //Authors = (IEnumerable<AuthorImagesViewModel>)b.Authors,
-                    //Genres = (ICollection<GenreType>)b.Genres
-                })
-                .ToList();
-
-            //if (!string.IsNullOrWhiteSpace(genre))
-            //{
-            //    bookQuery = bookQuery.Where(b => b.Genres.Select(g => g.Name).ToString() == genre);
-            //}
-
-            //var bookGenres = data
-            //    .Genres
-            //    .Select(g => g.Name.ToString()) 
-            //    .ToList();
-
-            // GenreTypes = bookGenres;
-            // SearchTerm = query.SearchTerm
-            query.TotalBooks = totalBooks;
-            query.Books = books;
+                Id = b.Id,
+                Title = b.Title,
+                ImageUrl = b.ImageUrl,
+            });
 
             return View(query);
         }

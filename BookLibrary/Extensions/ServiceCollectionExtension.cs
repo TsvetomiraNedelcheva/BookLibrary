@@ -1,4 +1,5 @@
-﻿using BookLibrary.Infrastructure.Data;
+﻿using BookLibrary.Core.Services;
+using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IApplicationDbRepository, ApplicatioDbRepository>();
+        services.AddScoped<IBookService, BookService>();
         return services;
     }
 
