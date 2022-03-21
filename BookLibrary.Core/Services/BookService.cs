@@ -57,5 +57,10 @@ namespace BookLibrary.Core.Services
                 Books = books
             };
         }
+
+        //public IEnumerable<BookServiceModel> MyBooks(string userId)
+        //{
+           
+        //}
     }
 }

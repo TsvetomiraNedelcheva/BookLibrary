@@ -2,6 +2,7 @@
 using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Models.Books;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Controllers
@@ -77,5 +78,11 @@ namespace BookLibrary.Controllers
 
             return View(query);
         }
+
+        //[Authorize]
+        //public IActionResult MyBooks()
+        //{
+           
+        //}
     }
 }

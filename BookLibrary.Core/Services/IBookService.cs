@@ -3,5 +3,6 @@
     public interface IBookService
     {
         BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage);
+       // IEnumerable<BookServiceModel> MyBooks(string userId);
     }
 }
