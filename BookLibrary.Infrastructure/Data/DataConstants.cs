@@ -18,5 +18,8 @@
         public const int MaxPagesValue = 1500;
 
         public const int MaxReviewLength = 1200;
+
+        public const int UserFirstNameMaxLength = 30;
+        public const int UserLastNameMaxLength = 30;
     }
 }

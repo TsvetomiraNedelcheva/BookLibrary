@@ -12,7 +12,7 @@ namespace BookLibrary.Infrastructure.Data.Models
             Id = Guid.NewGuid().ToString();
             Authors = new List<Author>();
             Genres = new List<Genre>();
-            Users = new List<IdentityUser>();
+            Users = new List<ApplicationUser>();
             Reviews = new List<Review>();
         }
 
@@ -40,7 +40,7 @@ namespace BookLibrary.Infrastructure.Data.Models
         
         public ICollection<Author> Authors { get; set; }
         public ICollection<Genre> Genres { get; set; }
-        public ICollection<IdentityUser> Users { get; set; }
+        public ICollection<ApplicationUser> Users { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
 

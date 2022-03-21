@@ -1,5 +1,6 @@
 ﻿using BookLibrary.Infrastructure.Data.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BookLibrary.Infrastructure.Data.DataConstants;
 
 namespace BookLibrary.Infrastructure.Data.Models
@@ -17,6 +18,7 @@ namespace BookLibrary.Infrastructure.Data.Models
         public string Id { get; set; }
 
         [Required]
+
         public GenreType Name { get; set; }
         public ICollection<Book> Books { get; set; }
         public ICollection<Author> Authors { get; set; }

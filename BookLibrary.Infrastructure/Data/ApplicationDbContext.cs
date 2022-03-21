@@ -1,10 +1,11 @@
 ﻿using BookLibrary.Infrastructure.Data.Models;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -14,7 +15,6 @@ namespace BookLibrary.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
 
             // Disable cascade delete
             var entityTypes = builder.Model.GetEntityTypes().ToList();
@@ -26,6 +26,7 @@ namespace BookLibrary.Infrastructure.Data
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
         }
 
         public DbSet<Book> Books { get; set; }
@@ -33,6 +34,7 @@ namespace BookLibrary.Infrastructure.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     }
 }
