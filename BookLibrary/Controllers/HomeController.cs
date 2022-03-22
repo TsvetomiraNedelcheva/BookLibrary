@@ -22,6 +22,7 @@ namespace BookLibrary.Controllers
                .OrderByDescending(b => b.Id)
                .Select(b => new AllBooksViewModel
                {
+                   Id = b.Id,
                    Title = b.Title,
                    ImageUrl = b.ImageUrl,
                     //Authors = (IEnumerable<AuthorImagesViewModel>)b.Authors,

@@ -2,7 +2,7 @@
 using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Models.Books;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Controllers
@@ -11,10 +11,13 @@ namespace BookLibrary.Controllers
     {
         private readonly ApplicationDbContext data;
         private readonly IBookService bookService;
-        public BookController(ApplicationDbContext _data, IBookService _bookService)
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public BookController(ApplicationDbContext _data, IBookService _bookService , UserManager<ApplicationUser> _userManager)
         {
             data = _data;
             bookService = _bookService;
+            userManager = _userManager;
         }
         public IActionResult Add() => View();
 
@@ -79,10 +82,16 @@ namespace BookLibrary.Controllers
             return View(query);
         }
 
-        //[Authorize]
-        //public IActionResult MyBooks()
-        //{
-           
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddToMyBookList(AllBooksViewModel model)
+        {
+            var user = await userManager.GetUserAsync(this.User);
+            var userId = await userManager.GetUserIdAsync(user);
+
+            await bookService.AddToMyBooks(model.Id, userId);
+
+            return RedirectToAction("Book", "MyBooks");
+        }
+
     }
 }

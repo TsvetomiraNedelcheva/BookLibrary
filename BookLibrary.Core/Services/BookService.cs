@@ -1,4 +1,5 @@
 ﻿using BookLibrary.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace BookLibrary.Core.Services
@@ -56,6 +57,24 @@ namespace BookLibrary.Core.Services
                 BooksPerPage = booksPerPage,
                 Books = books
             };
+        }
+
+        public async Task AddToMyBooks(string bookId, string userId)
+        {
+            var book = await data.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+            var user = await data.ApplicationUsers.FirstOrDefaultAsync(a => a.Id == userId);
+
+            if (book == null || user == null)
+            {
+                return;
+            }
+            if (user.Books.Contains(book))
+            {
+                return;
+            }
+
+            user.Books.Add(book);
+            await data.SaveChangesAsync();
         }
 
         //public IEnumerable<BookServiceModel> MyBooks(string userId)

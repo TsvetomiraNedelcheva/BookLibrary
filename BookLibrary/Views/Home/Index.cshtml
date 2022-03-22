@@ -23,7 +23,10 @@
                         @*<a href="#" class="card-link">Edit</a>
                             <a href="#" class="card-link">Delete</a>*@
                         <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
-                        <a href="#" class="card-link">Add to My Books</a>
+                        <form method="post">
+                        <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary">Add to My Books </button>
+                        @*<input type="hidden" asp-for="@book.Id" />   *@
+                    </form>
                     </div>
                 </div>
 
