@@ -90,8 +90,9 @@ namespace BookLibrary.Controllers
 
             await bookService.AddToMyBooks(model.Id, userId);
 
-            return RedirectToAction("Book", "MyBooks");
+            return RedirectToAction("MyBooks", "User");
         }
 
+      
     }
 }

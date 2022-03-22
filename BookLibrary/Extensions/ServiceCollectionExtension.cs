@@ -11,6 +11,7 @@ public static class ServiceCollectionExtension
     {
         services.AddScoped<IApplicationDbRepository, ApplicatioDbRepository>();
         services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 

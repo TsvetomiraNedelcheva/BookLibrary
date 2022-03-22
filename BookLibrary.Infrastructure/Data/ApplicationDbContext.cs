@@ -16,7 +16,7 @@ namespace BookLibrary.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Genre>().Property(x => x.Name).HasConversion<string>();
+            //builder.Entity<Genre>().Property(x => x.Name).HasConversion<string>();
 
             // Disable cascade delete
             var entityTypes = builder.Model.GetEntityTypes().ToList();
