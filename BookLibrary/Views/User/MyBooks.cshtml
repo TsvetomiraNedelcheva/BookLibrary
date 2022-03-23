@@ -5,7 +5,10 @@
 
 <h1 class="text-center" mb-5>Welcome to your book list, @Model.FisrtName!</h1>
 
-
+@if (!Model.Books.Any())
+{
+    <h2 class="text-center">You do not have any books yet.</h2>
+}
 
 <div class="row">
     <div class="col-md-4">

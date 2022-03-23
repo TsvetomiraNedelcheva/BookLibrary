@@ -1,6 +1,7 @@
 ﻿using BookLibrary.Core.Services;
 using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 using BookLibrary.Models.Books;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace BookLibrary.Controllers
         public IActionResult Add() => View();
 
         [HttpPost]
-        public IActionResult Add(AddBookFormModel book)
+        public IActionResult Add(BookFormModel book)
         {
             if (!ModelState.IsValid)
             {
@@ -93,6 +94,29 @@ namespace BookLibrary.Controllers
             return RedirectToAction("MyBooks", "User");
         }
 
+        public IActionResult Edit(string id)
+        {
+            var book = bookService.Details(id);
+
+
+            return View(new BookFormModel
+            {
+                Title = book.Title,
+                Description = book.Description,
+                ImageUrl = book.ImageUrl,
+                Pages = book.Pages,
+                Authors = (IEnumerable<AuthorImagesViewModel>)book.Authors,
+                Publisher = book.Publisher,
+                Genres = (ICollection<GenreType>)book.Genres
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit(string id, BookFormModel book)
+        {
+            var bookEdited = bookService.Edit(id, book.Title, book.Description, book.ImageUrl, book.Pages, book.Publisher, book.Authors, book.Genres);
+            return RedirectToAction("All", "Book");
+        }
       
     }
 }

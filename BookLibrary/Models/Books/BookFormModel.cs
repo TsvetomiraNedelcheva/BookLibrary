@@ -4,7 +4,7 @@ using static BookLibrary.Infrastructure.Data.DataConstants;
 
 namespace BookLibrary.Models.Books
 {
-    public class AddBookFormModel
+    public class BookFormModel
     {
         [Required]
         [StringLength(MaxBookTitleLength, MinimumLength = MinBookTitleLength,

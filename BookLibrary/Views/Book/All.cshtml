@@ -43,10 +43,12 @@
                         <li class="list-group-item">Vestibulum at eros</li>
                         </ul>*@
                     <div class="card-body">
-                        <a href="#" class="card-link">Edit</a>
-                        <a href="#" class="card-link">Delete</a>
-                        @*<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
-                            <a href="#" class="card-link">Add to My Books</a>*@
+                         <a asp-controller="Book" asp-action="Edit"asp-route-itemid="@book.Id" class="btn btn-warning mb-5">Edit</a>
+                            <a asp-controller="Book" asp-action="Delete" asp-route-itemid="@book.Id" class="btn btn-danger mb-5">Delete</a>
+                       @*<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
+                        <form method="post">
+                        <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary">Add to My Books </button>
+                         </form>*@
                     </div>
                 </div>
             }

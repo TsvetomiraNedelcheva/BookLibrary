@@ -1,4 +1,5 @@
 ﻿using BookLibrary.Infrastructure.Data;
+using BookLibrary.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -77,9 +78,84 @@ namespace BookLibrary.Core.Services
             await data.SaveChangesAsync();
         }
 
-        //public IEnumerable<BookServiceModel> MyBooks(string userId)
-        //{
-           
-        //}
+        public BookDetailsServiceModel Details(string id)
+        {
+            var book = this.data.Books
+                .Where(b => b.Id == id)
+                .Select(b => new BookDetailsServiceModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Description = b.Description,
+                    Pages = b.Pages,
+                    ImageUrl = b.ImageUrl
+                }).FirstOrDefault();
+
+            foreach (var inputAuthor in book.Authors) //because book is a service model
+            {
+                var author = data.Authors
+                    .Where(a => a.Name == inputAuthor.Name)
+                    .Select(a => new AuthorImagesServiceModel
+                    {
+                        Name = inputAuthor.Name,
+                        AuthorImageUrl = inputAuthor.AuthorImageUrl,
+                    }).FirstOrDefault();
+
+                var authorsList = new List<AuthorImagesServiceModel>();
+                authorsList.Add(author);
+
+                book.Authors = authorsList;
+            }
+
+            if (book.Publisher == null)
+            {
+                var publisher = new Publisher()
+                {
+                    Name = book.Publisher,
+                };
+
+                data.Publishers.Add(publisher);
+                book.Publisher = publisher.Name;
+            }
+            else
+            {
+                var publisher = data.Publishers.Where(p => p.Name == book.Publisher).FirstOrDefault();
+                book.Publisher = publisher.Name;
+            }
+
+            foreach (var inputGenre in book.Genres)
+            {
+                var genre = data.Genres
+                    .Where(g => g.Name.ToString() == inputGenre.Name)
+                    .Select(g => new GenreServiceModel
+                    {
+                       Name=g.Name.ToString(),
+
+                    }).FirstOrDefault();
+
+                var genresList = new List<GenreServiceModel>();
+                genresList.Add(genre);
+
+                book.Genres = genresList;
+            }
+
+            return book;
+        }
+
+        public bool Edit(string id, string title, string description, string imageURL, int pages, Publisher publisher, ICollection<Author> authors, ICollection<Genre> genres)
+        {
+            var bookData = data.Books.Find(id);
+
+            bookData.Title = title;
+            bookData.Description = description;
+            bookData.Authors = authors;
+            bookData.Genres = genres;
+            bookData.Pages = pages;
+            bookData.ImageUrl = imageURL;
+            bookData.Publisher = publisher;
+
+            data.SaveChanges();
+            return true;
+        }
     }
 }
