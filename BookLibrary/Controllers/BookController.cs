@@ -98,25 +98,63 @@ namespace BookLibrary.Controllers
         {
             var book = bookService.Details(id);
 
+            //var authorsListMapped = new List<AuthorImagesViewModel>();
+            //foreach (var author in book.Authors)
+            //{
+            //    authorsListMapped.Add(new AuthorImagesViewModel
+            //    {
+            //        Name = author.Name,
+            //        AuthorImageUrl = author.AuthorImageUrl,
+            //    });
+            //}
 
-            return View(new BookFormModel
+            string authorsString = "";
+            foreach (var author in book.Authors)
+            {
+                authorsString += author.Name + ",";
+            }
+
+            var genresListMapped = new List<string>();
+            foreach (var genres in book.Genres)
+            {
+                genresListMapped.Add(genres.Name.ToString());
+            }
+
+            var genreTypeList = genresListMapped.Select(x => Enum.Parse<GenreType>(x)).ToList();
+
+            return View(new EditBookFormModel
             {
                 Title = book.Title,
                 Description = book.Description,
                 ImageUrl = book.ImageUrl,
                 Pages = book.Pages,
-                Authors = (IEnumerable<AuthorImagesViewModel>)book.Authors,
+                Authors = authorsString,
                 Publisher = book.Publisher,
-                Genres = (ICollection<GenreType>)book.Genres
+                Genres = genreTypeList
             });
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, BookFormModel book)
+        public IActionResult Edit(string id, EditBookFormModel book)
         {
-            var bookEdited = bookService.Edit(id, book.Title, book.Description, book.ImageUrl, book.Pages, book.Publisher, book.Authors, book.Genres);
+            var authorsString  = "";
+            var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
+            //var bookAuthors = data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList(); //bookAuthors
+            var bookAuthors = book.Authors.Split(",").ToList();
+            foreach (var author in bookAuthors)
+            {
+                authorsString += author + ",";
+            }
+
+            var genresList = new List<string>();
+            foreach (var genre in book.Genres)
+            {
+                genresList.Add(genre.ToString());
+            }
+
+            bookService.Edit(id, book.Title, book.Description, book.ImageUrl, book.Pages, book.Publisher, authorsString.TrimEnd(','), genresList);
             return RedirectToAction("All", "Book");
         }
-      
+
     }
 }

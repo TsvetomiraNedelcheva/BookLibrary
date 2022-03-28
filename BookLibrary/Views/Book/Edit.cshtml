@@ -1,12 +1,29 @@
 ﻿@using BookLibrary.Infrastructure.Data.Models.Enums
-@model BookFormModel
+@using System.Text
+@model EditBookFormModel
 @{
     ViewData["Title"] = "Edit Book";
+}
+
+@{
+    string GetAuthorNames()
+    {
+        //StringBuilder sb = new StringBuilder();
+
+        //@foreach(var author in Model.Authors)
+        //{
+        //    sb.Append(author.Name + ",");
+        //}
+
+        //return sb.ToString();
+        //var authors = Model.Authors.Split(",").ToList();
+        return Model.Authors.ToString();
+    }
 }
 <div class="container">
     <div class="row">
         <div class="col-6 offset-3">
-            <h2 class="heading-margin text-center">Add Book</h2>
+            <h2 class="heading-margin text-center">Edit Book</h2>
             <form method="post">
                 <div class="form-group">
                     <label asp-for="Title"></label>
@@ -23,14 +40,16 @@
                     <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url of the book cover here">
                     <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
-                <div id="AuthorsContainer">
+                <div id="AuthorsContainer" class="text-dark">
                     <label asp-for="Authors"></label>
-                    <a class="btn btn-success" onclick="AddAnotherAuthor()">+</a>
+    @*                    <a class="btn btn-success" onclick="AddAnotherAuthor()">+</a>*@   
+                        <br />
+                    <input asp-for="Authors" id="input" type="text" class="bg-dark"  data-role="tagsinput" value="@GetAuthorNames()"/>
                 </div>
                 <div class="form-group">
                     <label asp-for="Pages"></label>
                     <input asp-for="Pages" class="form-control" type="number" placeholder="Enter number of pages here">
-                    <span asp-validation-for="Pages" class="text-danger"></span>
+                    <span asp-validation-for="Pages" class="text-danger"></span>    
                 </div>
                 <div class="form-group">
                     <label asp-for="Publisher"></label>
@@ -48,12 +67,14 @@
 
             @section Scripts {
             <script>
-                    var authorIndex = 0;
-                    function AddAnotherAuthor(){
-                         $("#AuthorsContainer").
-                    append("<div class='form-control'>Name: <input type='text' name='Authors[" + authorIndex + "].Name' /> Image URL: <input type='text' name='Authors[" + authorIndex +"].AuthorImageUrl' /></div>");
-                authorIndex++;
-                    }
+                //    var authorIndex = 0;
+                //    function AddAnotherAuthor(){
+                //         $("#AuthorsContainer").
+                //    append("<div class='form-control'>Name: <input type='text' name='Authors[" + authorIndex + "].Name' /> Image URL: <input type='text' name='Authors[" + authorIndex +"].AuthorImageUrl' /></div>");
+                //authorIndex++;
+                //    }
+               //  $("#input").tagsinput('items');
+               $("input").val()
             </script>
             }
         </div>

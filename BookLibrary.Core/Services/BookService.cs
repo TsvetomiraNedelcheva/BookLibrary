@@ -1,5 +1,6 @@
 ﻿using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -80,6 +81,28 @@ namespace BookLibrary.Core.Services
 
         public BookDetailsServiceModel Details(string id)
         {
+            var authorsList = new List<AuthorImagesServiceModel>();
+            var bookAuthorsDb = this.data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList();
+            foreach (var author in bookAuthorsDb)
+            {
+                authorsList.Add(new AuthorImagesServiceModel
+                {
+                    Name = author.Name,
+                    AuthorImageUrl = author.ImageUrl
+                });
+            }
+
+            var genresList = new List<GenreServiceModel>();
+            var genresDb = this.data.Books.Where(x => x.Id == id).SelectMany(x => x.Genres).ToList();
+
+            foreach (var genre in genresDb)
+            {
+                genresList.Add(new GenreServiceModel
+                {
+                    Name = genre.Name.ToString(),
+                });
+            }
+
             var book = this.data.Books
                 .Where(b => b.Id == id)
                 .Select(b => new BookDetailsServiceModel
@@ -88,74 +111,161 @@ namespace BookLibrary.Core.Services
                     Title = b.Title,
                     Description = b.Description,
                     Pages = b.Pages,
-                    ImageUrl = b.ImageUrl
+                    ImageUrl = b.ImageUrl,
+                    Authors = authorsList,
+                    Genres = genresList,
+                    Publisher = b.Publisher.Name
                 }).FirstOrDefault();
-
-            foreach (var inputAuthor in book.Authors) //because book is a service model
-            {
-                var author = data.Authors
-                    .Where(a => a.Name == inputAuthor.Name)
-                    .Select(a => new AuthorImagesServiceModel
-                    {
-                        Name = inputAuthor.Name,
-                        AuthorImageUrl = inputAuthor.AuthorImageUrl,
-                    }).FirstOrDefault();
-
-                var authorsList = new List<AuthorImagesServiceModel>();
-                authorsList.Add(author);
-
-                book.Authors = authorsList;
-            }
-
-            if (book.Publisher == null)
-            {
-                var publisher = new Publisher()
-                {
-                    Name = book.Publisher,
-                };
-
-                data.Publishers.Add(publisher);
-                book.Publisher = publisher.Name;
-            }
-            else
-            {
-                var publisher = data.Publishers.Where(p => p.Name == book.Publisher).FirstOrDefault();
-                book.Publisher = publisher.Name;
-            }
-
-            foreach (var inputGenre in book.Genres)
-            {
-                var genre = data.Genres
-                    .Where(g => g.Name.ToString() == inputGenre.Name)
-                    .Select(g => new GenreServiceModel
-                    {
-                       Name=g.Name.ToString(),
-
-                    }).FirstOrDefault();
-
-                var genresList = new List<GenreServiceModel>();
-                genresList.Add(genre);
-
-                book.Genres = genresList;
-            }
 
             return book;
         }
 
-        public bool Edit(string id, string title, string description, string imageURL, int pages, Publisher publisher, ICollection<Author> authors, ICollection<Genre> genres)
+        public void Edit(string id, string title, string description, string imageURL, int pages, string publisher,
+            string authorsInput, List<string> genres)
         {
-            var bookData = data.Books.Find(id);
+            var authorsNamesList = authorsInput.Split(","); //array of the names
+
+            var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
+            var bookAuthors = data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList(); //bookAuthors
+
+            var authorsList = new List<Author>(); //list of authors to be mapped              
+
+            var authorBooksToRemove = bookAuthors.Select(x => x.Name).Except(authorsNamesList).ToList();
+            foreach (var author in authorBooksToRemove)
+            {
+                var authorToEdit = data.Authors.Where(x => x.Name == author).Include(x=>x.Books).FirstOrDefault();
+                authorToEdit.Books.Remove(bookData);
+            }
+
+            foreach (var authorName in authorsNamesList)
+            {
+                //finding the author w that name
+                var author = bookAuthors.Where(a => a.Name == authorName).FirstOrDefault();
+
+                if (author == null)
+                {
+                    var newAuthor = new Author()
+                    {
+                        Name = authorName,
+                        ImageUrl = "" // ?
+
+                    };
+                    newAuthor.Books.Add(bookData);
+                    authorsList.Add(newAuthor);
+                    data.Authors.Add(newAuthor); //adding the author in the db
+                }
+                else
+                {
+                    var authorBooks = data.Authors.Where(x=>x.Name == authorName).SelectMany(x => x.Books).ToList();
+                    if (!authorBooks.Contains(bookData))
+                    {
+                        authorBooks.Add(bookData);
+                    }
+                }
+            }
+
+
+            var bookGenres = data.Books.Where(x => x.Id == id).SelectMany(x => x.Genres).ToList();
+            var genresList = new List<Genre>();
+
+
+            foreach (var editedGenre in genres)
+            {
+                if (editedGenre == GenreType.Classics.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Classics
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Fiction.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Fiction
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.NonFiction.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.NonFiction
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Science.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Science
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Fantasy.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Fantasy
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Romance.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Romance
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Thriller.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Thriller
+                    };
+                    genresList.Add(newGenre);
+                }
+                else if (editedGenre == GenreType.Biography.ToString())
+                {
+                    var newGenre = new Genre()
+                    {
+                        Name = GenreType.Biography
+                    };
+                    genresList.Add(newGenre);
+                }
+            }
+
+
+            var bookPublisher = data.Books.Where(x => x.Id == id).Select(x => x.Publisher).FirstOrDefault();
+            Publisher newPublisher;
+            if (publisher != bookPublisher.Name || bookPublisher == null)
+            {
+                newPublisher = new Publisher()
+                {
+                    Name = publisher
+                };
+                newPublisher.Books.Add(bookData);
+                foreach (var author in authorsList)
+                {
+                    newPublisher.Authors.Add(author);
+                }
+            }
+            else
+            {
+                newPublisher = bookPublisher;
+            }
 
             bookData.Title = title;
             bookData.Description = description;
-            bookData.Authors = authors;
-            bookData.Genres = genres;
             bookData.Pages = pages;
             bookData.ImageUrl = imageURL;
-            bookData.Publisher = publisher;
+            bookData.Publisher = newPublisher;
+            //  bookData.Authors = authorsList;
+            bookData.Genres = genresList;
 
             data.SaveChanges();
-            return true;
         }
     }
 }
