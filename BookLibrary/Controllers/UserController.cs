@@ -18,13 +18,14 @@ namespace BookLibrary.Controllers
         public async Task<IActionResult> MyBooks()      
         {
             var user = await userManager.GetUserAsync(this.User);
+            var userBooks = data.ApplicationUsers.Where(x => x.Id == user.Id).SelectMany(x => x.Books).ToList();
 
             var vm = new UserViewModel
             {
                 UserName = user.UserName,
                 FisrtName = user.FisrtName,
                 LastName = user.LastName,
-                Books = user.Books
+                Books = userBooks
             };
 
             return View(vm);
