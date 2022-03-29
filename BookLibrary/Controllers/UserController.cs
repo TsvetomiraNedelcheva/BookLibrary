@@ -18,7 +18,7 @@ namespace BookLibrary.Controllers
         public async Task<IActionResult> MyBooks()      
         {
             var user = await userManager.GetUserAsync(this.User);
-            var userBooks = data.ApplicationUsers.Where(x => x.Id == user.Id).SelectMany(x => x.Books).ToList();
+            var userBooks = data.ApplicationUsers.Where(x => x.Id == user.Id).SelectMany(x => x.Books).Where(b => b.IsDeleted == false).ToList();
 
             var vm = new UserViewModel
             {

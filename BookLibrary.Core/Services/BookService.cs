@@ -46,7 +46,7 @@ namespace BookLibrary.Core.Services
 
         public async Task AddToMyBooks(string bookId, string userId)
         {
-            var book = await data.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+            var book = await data.Books.Where(b => b.IsDeleted == false).FirstOrDefaultAsync(b => b.Id == bookId);
             var user = await data.ApplicationUsers.FirstOrDefaultAsync(a => a.Id == userId);
 
             if (book == null || user == null)
