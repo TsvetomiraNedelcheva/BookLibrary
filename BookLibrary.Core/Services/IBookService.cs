@@ -9,5 +9,6 @@ namespace BookLibrary.Core.Services
         BookDetailsServiceModel Details(string id);
 
         void Edit(string id, string title, string description, string imageURL, int pages, string publisher, string authors, List<string> genres);
+        void Delete(string id);
     }
 }

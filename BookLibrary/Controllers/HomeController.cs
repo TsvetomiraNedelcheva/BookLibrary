@@ -19,6 +19,7 @@ namespace BookLibrary.Controllers
         {
             var books = data
                .Books
+               .Where(b=>b.IsDeleted == false)
                .OrderByDescending(b => b.Id)
                .Select(b => new AllBooksViewModel
                {

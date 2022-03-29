@@ -5,12 +5,14 @@
 }
 <h1 class="text-center">Welcome to Book Library</h1>
 <div class="container">
-<div class="row m-3">
+    <div class="row m-3">
         <div class="card-deck col-md-5">
             @foreach (var book in Model)
             {
-                <div class="card ">
-                    <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
+                @if (!book.IsDeleted)
+                {
+                    <div class="card ">
+                        <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
                     <div class="card-body">
                         <h5 class="card-title">@book.Title</h5>
                     </div>
@@ -20,17 +22,20 @@
                         <li class="list-group-item">Vestibulum at eros</li>
                         </ul>*@
                     <div class="card-body">
-                        <a asp-controller="Book" asp-action="Edit"  asp-route-id="@book.Id" class="btn btn-warning mb-5">Edit</a>
-                            <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger mb-5">Delete</a>
+                        <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning mb-5">Edit</a>
+                        @*<a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger mb-5">Delete</a>*@
+                        <form method="post">
+                            <button asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger mb-5">Delete</button>
+                        </form>
                         <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
                         <form method="post">
-                        <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary">Add to My Books </button>
-                        @*<input type="hidden" asp-for="@book.Id" />   *@
-                    </form>
+                            <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary">Add to My Books </button>
+                            @*<input type="hidden" asp-for="@book.Id" />   *@
+                        </form>
                     </div>
                 </div>
-
+                }
             }
         </div>
-</div>
+    </div>
 </div>

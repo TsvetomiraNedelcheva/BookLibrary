@@ -18,6 +18,7 @@ namespace BookLibrary.Models.Books
         [Url]
         [Display(Name = "Image URL")]
         public string ImageUrl { get; set; }
+        public bool IsDeleted { get; set; } 
         public IEnumerable<AuthorImagesViewModel> Authors { get; set; }
         public ICollection<GenreType> Genres { get; set; }
     }

@@ -16,7 +16,7 @@ namespace BookLibrary.Core.Services
         public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage)
         {
 
-            var bookQuery = this.data.Books.AsQueryable();
+            var bookQuery = this.data.Books.Where(b => b.IsDeleted == false).AsQueryable();
 
             var totalBooks = bookQuery.Count();
 
@@ -32,25 +32,8 @@ namespace BookLibrary.Core.Services
                 {
                     Title = b.Title,
                     ImageUrl = b.ImageUrl,
-                    //Authors = (IEnumerable<AuthorImagesViewModel>)b.Authors,
-                    //Genres = (ICollection<GenreType>)b.Genres
                 })
                 .ToList();
-
-            //if (!string.IsNullOrWhiteSpace(genre))
-            //{
-            //    bookQuery = bookQuery.Where(b => b.Genres.Select(g => g.Name).ToString() == genre);
-            //}
-
-            //var bookGenres = data
-            //    .Genres
-            //    .Select(g => g.Name.ToString()) 
-            //    .ToList();
-
-            // GenreTypes = bookGenres;
-            // SearchTerm = query.SearchTerm
-            //query.TotalBooks = totalBooks;
-            //query.Books = books;
 
             return new BookQueryServiceModel
             {
@@ -266,6 +249,14 @@ namespace BookLibrary.Core.Services
             bookData.Genres = genresList;
 
             data.SaveChanges();
+        }
+
+        public void Delete(string id)
+        {
+            var bookToDelete = data.Books.FirstOrDefault(b => b.Id == id);
+            bookToDelete.IsDeleted = true;
+            data.SaveChanges();
+
         }
     }
 }

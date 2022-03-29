@@ -56,8 +56,9 @@ namespace BookLibrary.Controllers
                         Name = inputAuthor.Name,
                         ImageUrl = inputAuthor.AuthorImageUrl
                     };
+                    data.Authors.Add(author);
                 }
-                data.Authors.Add(author);
+
                 newBook.Authors.Add(author);
             }
 
@@ -97,17 +98,6 @@ namespace BookLibrary.Controllers
         public IActionResult Edit(string id)
         {
             var book = bookService.Details(id);
-
-            //var authorsListMapped = new List<AuthorImagesViewModel>();
-            //foreach (var author in book.Authors)
-            //{
-            //    authorsListMapped.Add(new AuthorImagesViewModel
-            //    {
-            //        Name = author.Name,
-            //        AuthorImageUrl = author.AuthorImageUrl,
-            //    });
-            //}
-
             string authorsString = "";
             foreach (var author in book.Authors)
             {
@@ -139,7 +129,6 @@ namespace BookLibrary.Controllers
         {
             var authorsString  = "";
             var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
-            //var bookAuthors = data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList(); //bookAuthors
             var bookAuthors = book.Authors.Split(",").ToList();
             foreach (var author in bookAuthors)
             {
@@ -153,6 +142,13 @@ namespace BookLibrary.Controllers
             }
 
             bookService.Edit(id, book.Title, book.Description, book.ImageUrl, book.Pages, book.Publisher, authorsString.TrimEnd(','), genresList);
+            return RedirectToAction("All", "Book");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(string id)
+        {
+            bookService.Delete(id);
             return RedirectToAction("All", "Book");
         }
 
