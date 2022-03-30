@@ -6,14 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly ApplicationDbContext data;
         private readonly UserManager<ApplicationUser> userManager;
-        public UserController(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager)
+        private readonly RoleManager<IdentityRole> roleManager;
+        public UserController(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager)
         {
             data = _data;
             userManager = _userManager;
+            roleManager = _roleManager;
         }
         public async Task<IActionResult> MyBooks()      
         {
@@ -29,6 +31,18 @@ namespace BookLibrary.Controllers
             };
 
             return View(vm);
+        }
+
+
+
+        public async Task<IActionResult> CreateRole()
+        {
+            //await roleManager.CreateAsync(new IdentityRole()
+            //{
+            //    Name = "Admin"
+            //});
+
+            return Ok();
         }
     }
 }
