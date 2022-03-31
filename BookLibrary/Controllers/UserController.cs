@@ -32,17 +32,5 @@ namespace BookLibrary.Controllers
 
             return View(vm);
         }
-
-
-
-        public async Task<IActionResult> CreateRole()
-        {
-            //await roleManager.CreateAsync(new IdentityRole()
-            //{
-            //    Name = "Admin"
-            //});
-
-            return Ok();
-        }
     }
 }

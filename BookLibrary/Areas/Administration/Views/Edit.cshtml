@@ -1,0 +1,67 @@
+﻿@using BookLibrary.Infrastructure.Data.Models.Enums
+@using System.Text
+@model EditBookFormModel
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+@{
+    string GetAuthorNames()
+    {
+        return Model.Authors.ToString();
+    }
+}
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <h2 class="heading-margin text-center">Edit Book</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter title here">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter description of the book here" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageUrl"></label>
+                    <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url of the book cover here">
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div id="AuthorsContainer" class="text-dark">
+                    <label asp-for="Authors"></label>
+    @*                    <a class="btn btn-success" onclick="AddAnotherAuthor()">+</a>*@   
+                        <br />
+                    <input asp-for="Authors" id="input" type="text" class="bg-dark"  data-role="tagsinput" value="@GetAuthorNames()"/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Pages"></label>
+                    <input asp-for="Pages" class="form-control" type="number" placeholder="Enter number of pages here">
+                    <span asp-validation-for="Pages" class="text-danger"></span>    
+                </div>
+                <div class="form-group">
+                    <label asp-for="Publisher"></label>
+                    <input asp-for="Publisher" class="form-control" placeholder="Enter publisher name here">
+                    <span asp-validation-for="Publisher" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Genres"></label>
+                    <select multiple class="form-control" asp-for="Genres" asp-items="@Html.GetEnumSelectList<GenreType>()">
+                    </select>
+                    <span asp-validation-for="Genres" class="text-danger"></span>
+                </div>
+                <input class="btn btn-primary float-right btn-margin" type="submit" value="Save" />
+            </form>
+
+            @section Scripts {
+            <script>
+               $("input").val()
+            </script>
+            }
+        </div>
+    </div>
+</div>
+
