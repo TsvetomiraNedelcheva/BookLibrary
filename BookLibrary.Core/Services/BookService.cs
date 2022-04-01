@@ -62,7 +62,7 @@ namespace BookLibrary.Core.Services
             await data.SaveChangesAsync();
         }
 
-        public BookDetailsServiceModel Details(string id)
+        public BookEditDetailsServiceModel EditDetails(string id)
         {
             var authorsList = new List<AuthorImagesServiceModel>();
             var bookAuthorsDb = this.data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList();
@@ -88,7 +88,7 @@ namespace BookLibrary.Core.Services
 
             var book = this.data.Books
                 .Where(b => b.Id == id)
-                .Select(b => new BookDetailsServiceModel
+                .Select(b => new BookEditDetailsServiceModel
                 {
                     Id = b.Id,
                     Title = b.Title,
@@ -257,6 +257,25 @@ namespace BookLibrary.Core.Services
             bookToDelete.IsDeleted = true;
             data.SaveChanges();
 
+        }
+
+        public BookDetailsServiceModel Details(string id)
+        {
+            var book = this.data.Books
+              .Where(b => b.Id == id)
+              .Select(b => new BookDetailsServiceModel
+              {
+                  Id = b.Id,
+                  Title = b.Title,
+                  Description = b.Description,
+                  Pages = b.Pages,
+                  ImageUrl = b.ImageUrl,
+                  Authors = b.Authors.Select(x=>x.Name.ToString()).ToList(),
+                  Genres = b.Genres.Select(x=>x.Name.ToString()).ToList(),
+                  Publisher = b.Publisher.Name
+              }).FirstOrDefault();
+
+            return book;
         }
     }
 }

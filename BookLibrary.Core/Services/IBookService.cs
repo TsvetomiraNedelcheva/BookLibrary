@@ -6,9 +6,11 @@ namespace BookLibrary.Core.Services
     {
         BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage);
          Task AddToMyBooks(string bookId, string userId);
-        BookDetailsServiceModel Details(string id);
+        BookEditDetailsServiceModel EditDetails(string id);
 
         void Edit(string id, string title, string description, string imageURL, int pages, string publisher, string authors, List<string> genres);
         void Delete(string id);
+
+        BookDetailsServiceModel Details(string id);
     }
 }

@@ -1,0 +1,78 @@
+﻿@using BookLibrary.Core.Services
+@model BookDetailsServiceModel
+@{
+     ViewData["Title"] = "Details";
+}
+@{
+    string GetAuthors()
+    {
+        string authors = "";
+        foreach(var author in Model.Authors)
+        {
+            authors += author + ",";
+        }
+        return authors.TrimEnd(',');
+    }
+
+    string GetGenres()
+    {
+        string genres = "";
+        foreach(var genre in Model.Genres)
+        {
+            genres += genre + ",";
+        }
+        return genres.TrimEnd(',');
+    }
+}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+                 
+            <h1 class="display-2 text-bold mb-3">@Model.Title</h1>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <div class="white-box text-center"> <img class="card-img-top" src="@Model.ImageUrl" alt="@Model.Title"></div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <h4 class="box-title mt-5">Description</h4>
+                    <p>@Model.Description</p>
+                   @* <h3 class="box-title mt-5">Key Highlights</h3>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-check text-success"></i>Sturdy structure</li>
+                        <li><i class="fa fa-check text-success"></i>Designed to foster easy portability</li>
+                        <li><i class="fa fa-check text-success"></i>Perfect furniture to flaunt your wonderful collectibles</li>
+                    </ul>*@
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <h3 class="box-title mt-5">General Info</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-product">
+                            <tbody>
+                                <tr>
+                                    <td width="390">Author/s</td>
+
+                                    <td>@GetAuthors()</td>                                      
+                                </tr>
+                                <tr>
+                                    <td>Genres</td>
+                                    <td>@GetGenres()</td>
+                                </tr>
+                                <tr>
+                                    <td>Publisher</td>
+                                    <td>@Model.Publisher</td>
+                                </tr>
+                                <tr>
+                                    <td>Pages</td>
+                                    <td>@Model.Pages</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>

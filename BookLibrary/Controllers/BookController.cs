@@ -97,7 +97,7 @@ namespace BookLibrary.Controllers
 
         public IActionResult Edit(string id)
         {
-            var book = bookService.Details(id);
+            var book = bookService.EditDetails(id);
             string authorsString = "";
             foreach (var author in book.Authors)
             {
@@ -150,6 +150,22 @@ namespace BookLibrary.Controllers
         {
             bookService.Delete(id);
             return RedirectToAction("All", "Book");
+        }
+
+        public IActionResult Details(string id)
+        {
+            var book = bookService.Details(id);
+
+            return View(new BookDetailsServiceModel
+            {
+                Title = book.Title,
+                Description = book.Description,
+                ImageUrl = book.ImageUrl,
+                Pages = book.Pages,
+                Authors = book.Authors,
+                Publisher = book.Publisher,
+                Genres = book.Genres
+            });
         }
 
     }

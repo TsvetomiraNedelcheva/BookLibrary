@@ -4,6 +4,8 @@ namespace BookLibrary.Models.Books
 {
     public class AllBooksQueryModel
     {
+        public string Id { get; set; }
+
         public const int BooksPerPage = 6;
         public int CurrentPage { get; set; } = 1;
         public int TotalBooks { get; set; }
