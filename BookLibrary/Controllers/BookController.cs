@@ -167,6 +167,5 @@ namespace BookLibrary.Controllers
                 Genres = book.Genres
             });
         }
-
     }
 }

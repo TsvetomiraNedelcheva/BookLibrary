@@ -5,26 +5,14 @@
 
 <h1 class="text-center mb-5">Browse Books</h1>
 
-@*<form method="get">
+<form method="get">
     <div class="row mb-5">
-    <div class="form-group col-md-3 mt-0">
-    <label asp-for="SearchTerm"></label>
-    <input asp-for="SearchTerm" class="form-control">
+        <div class="form-group col-md-3 mt-0">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control">
+        </div>
     </div>
-    @*        <div class="form-group col-md-3">
-    <label asp-for="GenreType"></label>
-    <select class="form-control" asp-for="GenreType">
-    @foreach
-    (var genre in Model.GenreTypes){
-    <option value="@genre">@genre</option>
-    }
-    </select>
-    </div>*@
-@*      <div class="form-group col-md-3">
-    <input type="submit" class="btn btn-primary d-none" />
-    </div>
-    </div>
-    </form>*@*
+</form>
 
 
 <div class="row">
