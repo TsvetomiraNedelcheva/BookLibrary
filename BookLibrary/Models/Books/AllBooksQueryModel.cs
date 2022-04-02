@@ -6,7 +6,7 @@ namespace BookLibrary.Models.Books
     {
         public string Id { get; set; }
 
-        public const int BooksPerPage = 6;
+        public const int BooksPerPage = 4;
         public int CurrentPage { get; set; } = 1;
         public int TotalBooks { get; set; }
         public IEnumerable<string> Titles { get; set; }
