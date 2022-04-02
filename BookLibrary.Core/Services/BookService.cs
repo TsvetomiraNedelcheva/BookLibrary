@@ -277,5 +277,43 @@ namespace BookLibrary.Core.Services
 
             return book;
         }
+
+        public void Add(string title, string description, int pages, string imageUrl, string publisher, IEnumerable<AuthorImagesServiceModel> authors, ICollection<GenreType> genres)
+        {
+            var genresList = new List<Genre>();
+            foreach (var item in genres)
+            {
+                genresList.Add(new Genre { Name = item });
+            }
+
+            var newBook = new Book
+            {
+                Title = title,
+                Description = description,
+                Pages = pages,
+                ImageUrl = imageUrl,
+                Publisher = new Publisher { Name = publisher },
+                Genres = genresList,
+            };
+
+            foreach (var inputAuthor in authors)
+            {
+                var author = data.Authors.FirstOrDefault(a => a.Name == inputAuthor.Name);
+                if (author == null)
+                {
+                    author = new Author()
+                    {
+                        Name = inputAuthor.Name,
+                        ImageUrl = inputAuthor.AuthorImageUrl
+                    };
+                    data.Authors.Add(author);
+                }
+
+                newBook.Authors.Add(author);
+            }
+
+            data.Books.Add(newBook);
+            data.SaveChanges();
+        }
     }
 }
