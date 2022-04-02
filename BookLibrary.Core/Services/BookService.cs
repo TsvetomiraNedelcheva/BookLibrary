@@ -30,6 +30,7 @@ namespace BookLibrary.Core.Services
                 .OrderByDescending(b => b.Id)
                 .Select(b => new BookServiceModel
                 {
+                    Id = b.Id,
                     Title = b.Title,
                     ImageUrl = b.ImageUrl,
                 })

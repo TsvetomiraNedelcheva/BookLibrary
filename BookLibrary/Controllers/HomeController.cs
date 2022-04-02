@@ -20,14 +20,12 @@ namespace BookLibrary.Controllers
             var books = data
                .Books
                .Where(b=>b.IsDeleted == false)
-               .OrderByDescending(b => b.Id)
+               .OrderBy(b => b.Title)
                .Select(b => new AllBooksViewModel
                {
                    Id = b.Id,
                    Title = b.Title,
                    ImageUrl = b.ImageUrl,
-                    //Authors = (IEnumerable<AuthorImagesViewModel>)b.Authors,
-                    //Genres = (ICollection<GenreType>)b.Genres
                 })
                .Take(3)
                .ToList();
