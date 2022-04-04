@@ -1,0 +1,31 @@
+﻿@using BookLibrary.Core.Services.ServiceModels
+@model AuthorDetailsServiceModel
+@{
+    ViewData["Title"] = " Author Details";
+}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+                 
+            <h1 class="display-2 text-bold mb-3">@Model.Name</h1>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <div class="white-box text-center"> <img class="card-img-top" src="@Model.ImageUrl" alt="@Model.Name"></div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <h4 class="box-title mt-5">Books By This Author</h4>
+                    <ul class="list-unstyled">
+                        @foreach(var book in Model.Books)
+                        {
+                            <li><a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id">@book.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>

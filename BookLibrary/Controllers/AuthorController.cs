@@ -26,5 +26,18 @@ namespace BookLibrary.Controllers
 
             return View(query);
         }
+
+        public async Task<IActionResult> AuthorDetails(string id)
+        {
+            var author = authorService.AuthorDetails(id);
+
+            return View(new AuthorDetailsServiceModel
+            {
+                Id = author.Id,
+                Name = author.Name,
+                ImageUrl = author.ImageUrl,
+                Books = author.Books
+            });
+        }
     }
 }
