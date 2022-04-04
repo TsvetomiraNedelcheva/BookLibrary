@@ -12,6 +12,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IApplicationDbRepository, ApplicatioDbRepository>();
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthorService, AuthorService>();
         return services;
     }
 
