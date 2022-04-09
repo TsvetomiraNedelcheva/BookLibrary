@@ -12,5 +12,6 @@ namespace BookLibrary.Core.Services
         public string Publisher { get; set; }
         public IEnumerable<string> Authors { get; set; }
         public IEnumerable<string> Genres { get; set; }
+        public IEnumerable<Review> Reviews { get; set; }
     }
 }

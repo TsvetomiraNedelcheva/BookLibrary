@@ -276,6 +276,7 @@ namespace BookLibrary.Core.Services
                   ImageUrl = b.ImageUrl,
                   Authors = b.Authors.Select(x => x.Name.ToString()).ToList(),
                   Genres = b.Genres.Select(x => x.Name.ToString()).ToList(),
+                  Reviews = b.Reviews,
                   Publisher = b.Publisher.Name
               }).FirstOrDefault();
 

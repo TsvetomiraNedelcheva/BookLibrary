@@ -130,6 +130,7 @@ namespace BookLibrary.Controllers
                 Pages = book.Pages,
                 Authors = book.Authors,
                 Publisher = book.Publisher,
+                Reviews = book.Reviews,
                 Genres = book.Genres
             });
         }
