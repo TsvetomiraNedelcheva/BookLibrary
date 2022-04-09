@@ -1,0 +1,21 @@
+﻿@using BookLibrary.Core.Services.ServiceModels
+@model AddReviewServiceModel
+@{
+    ViewData["Title"] = "Leave a Review";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <h2 class="heading-margin text-center">Leave a Review</h2>
+            <form asp-controller="Book" asp-action="Review" method="post">
+                @*<input type="hidden" name= "BookId" value="@Model.BookId" />*@
+                <div class="form-group">
+                    <label asp-for="Content"></label>
+                    <textarea asp-for="Content" class="form-control" placeholder="What did you think of this book?" rows="8"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <input class="btn btn-primary float-right btn-margin" type="submit" value="Post" />
+            </form>
+        </div>
+    </div>
+</div>

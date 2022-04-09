@@ -1,6 +1,8 @@
-﻿using BookLibrary.Infrastructure.Data;
+﻿using BookLibrary.Core.Services.ServiceModels;
+using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Infrastructure.Data.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -9,9 +11,11 @@ namespace BookLibrary.Core.Services
     public class BookService : IBookService
     {
         private readonly ApplicationDbContext data;
-        public BookService(ApplicationDbContext _data)
+        private readonly UserManager<ApplicationUser> userManager;
+        public BookService(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager)
         {
             data = _data;
+            userManager = _userManager;
         }
         public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage)
         {
@@ -117,7 +121,7 @@ namespace BookLibrary.Core.Services
             var authorBooksToRemove = bookAuthors.Select(x => x.Name).Except(authorsNamesList).ToList();
             foreach (var author in authorBooksToRemove)
             {
-                var authorToEdit = data.Authors.Where(x => x.Name == author).Include(x=>x.Books).FirstOrDefault();
+                var authorToEdit = data.Authors.Where(x => x.Name == author).Include(x => x.Books).FirstOrDefault();
                 authorToEdit.Books.Remove(bookData);
             }
 
@@ -140,7 +144,7 @@ namespace BookLibrary.Core.Services
                 }
                 else
                 {
-                    var authorBooks = data.Authors.Where(x=>x.Name == authorName).SelectMany(x => x.Books).ToList();
+                    var authorBooks = data.Authors.Where(x => x.Name == authorName).SelectMany(x => x.Books).ToList();
                     if (!authorBooks.Contains(bookData))
                     {
                         authorBooks.Add(bookData);
@@ -246,7 +250,6 @@ namespace BookLibrary.Core.Services
             bookData.Pages = pages;
             bookData.ImageUrl = imageURL;
             bookData.Publisher = newPublisher;
-            //  bookData.Authors = authorsList;
             bookData.Genres = genresList;
 
             data.SaveChanges();
@@ -271,8 +274,8 @@ namespace BookLibrary.Core.Services
                   Description = b.Description,
                   Pages = b.Pages,
                   ImageUrl = b.ImageUrl,
-                  Authors = b.Authors.Select(x=>x.Name.ToString()).ToList(),
-                  Genres = b.Genres.Select(x=>x.Name.ToString()).ToList(),
+                  Authors = b.Authors.Select(x => x.Name.ToString()).ToList(),
+                  Genres = b.Genres.Select(x => x.Name.ToString()).ToList(),
                   Publisher = b.Publisher.Name
               }).FirstOrDefault();
 
@@ -314,6 +317,19 @@ namespace BookLibrary.Core.Services
             }
 
             data.Books.Add(newBook);
+            data.SaveChanges();
+        }
+
+        public void LeaveReview(string bookId, string userId, string content)
+        {
+            var book = data.Books.Where(b => b.Id == bookId).FirstOrDefault();
+            book.Reviews.Add(new Review
+            {
+                BookId =book.Id,
+                UserId = userId,
+                Text = content
+            });
+
             data.SaveChanges();
         }
     }

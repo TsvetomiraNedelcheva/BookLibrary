@@ -15,7 +15,7 @@ namespace BookLibrary.Controllers
         private readonly IBookService bookService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public BookController(ApplicationDbContext _data, IBookService _bookService , UserManager<ApplicationUser> _userManager)
+        public BookController(ApplicationDbContext _data, IBookService _bookService, UserManager<ApplicationUser> _userManager)
         {
             data = _data;
             bookService = _bookService;
@@ -35,7 +35,7 @@ namespace BookLibrary.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult All([FromQuery]AllBooksQueryModel query)
+        public IActionResult All([FromQuery] AllBooksQueryModel query)
         {
             var books = bookService.All(query.SearchTerm, query.CurrentPage, AllBooksQueryModel.BooksPerPage);
 
@@ -93,7 +93,7 @@ namespace BookLibrary.Controllers
         [HttpPost]
         public IActionResult Edit(string id, EditBookFormModel book)
         {
-            var authorsString  = "";
+            var authorsString = "";
             var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
             var bookAuthors = book.Authors.Split(",").ToList();
             foreach (var author in bookAuthors)
@@ -132,6 +132,21 @@ namespace BookLibrary.Controllers
                 Publisher = book.Publisher,
                 Genres = book.Genres
             });
+        }
+
+        public async Task<IActionResult> Review()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Review(string id, AddReviewServiceModel model)
+        {
+            var user = await userManager.GetUserAsync(this.User);
+
+            bookService.LeaveReview(id, user.Id, model.Content);
+            return RedirectToAction("Details", new { id = id });
+
         }
     }
 }

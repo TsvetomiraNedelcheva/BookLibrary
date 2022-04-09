@@ -1,5 +1,4 @@
-﻿using BookLibrary.Infrastructure.Data.Models;
-using BookLibrary.Infrastructure.Data.Models.Enums;
+﻿using BookLibrary.Infrastructure.Data.Models.Enums;
 
 namespace BookLibrary.Core.Services
 {
@@ -14,5 +13,7 @@ namespace BookLibrary.Core.Services
         void Delete(string id);
 
         BookDetailsServiceModel Details(string id);
+
+        void LeaveReview(string bookId, string userId, string content);
     }
 }
