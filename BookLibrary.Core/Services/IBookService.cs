@@ -1,11 +1,12 @@
-﻿using BookLibrary.Infrastructure.Data.Models.Enums;
+﻿using BookLibrary.Infrastructure.Data.Models;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 
 namespace BookLibrary.Core.Services
 {
     public interface IBookService
     {
         public void Add(string title, string description, int pages, string imageUrl, string publisher, IEnumerable<AuthorImagesServiceModel> authors, ICollection<GenreType> genres);
-        BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage);
+        BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage,List<Book> currentUserBooks);
          Task AddToMyBooks(string bookId, string userId);
         Task RemoveFromBookList(string bookId, string userId);
         BookEditDetailsServiceModel EditDetails(string id);

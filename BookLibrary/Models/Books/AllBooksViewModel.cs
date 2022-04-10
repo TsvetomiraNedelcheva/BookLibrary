@@ -21,5 +21,7 @@ namespace BookLibrary.Models.Books
         public bool IsDeleted { get; set; } 
         public IEnumerable<AuthorImagesViewModel> Authors { get; set; }
         public ICollection<GenreType> Genres { get; set; }
+
+        public bool IsAvailableToAddByUser { get; set; } = true;
     }
 }

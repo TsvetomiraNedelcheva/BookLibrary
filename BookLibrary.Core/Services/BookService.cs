@@ -17,9 +17,8 @@ namespace BookLibrary.Core.Services
             data = _data;
             userManager = _userManager;
         }
-        public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage)
+        public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage,List<Book> currentUserBooks)
         {
-
             var bookQuery = this.data.Books.Where(b => b.IsDeleted == false).AsQueryable();
 
             var totalBooks = bookQuery.Count();
@@ -36,16 +35,26 @@ namespace BookLibrary.Core.Services
                 {
                     Id = b.Id,
                     Title = b.Title,
-                    ImageUrl = b.ImageUrl,
+                    ImageUrl = b.ImageUrl,                
                 })
                 .ToList();
+
+
+            foreach (var book in books)
+            {
+                var userBook = currentUserBooks.Where(x => x.Id == book.Id).FirstOrDefault();
+                if (userBook != null)
+                {
+                    book.IsAvailableToAddByUser = false;
+                }
+            }
 
             return new BookQueryServiceModel
             {
                 TotalBooks = totalBooks,
                 CurrentPage = currentPage,
                 BooksPerPage = booksPerPage,
-                Books = books
+                Books = books                
             };
         }
 

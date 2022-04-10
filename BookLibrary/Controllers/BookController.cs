@@ -37,7 +37,10 @@ namespace BookLibrary.Controllers
 
         public IActionResult All([FromQuery] AllBooksQueryModel query)
         {
-            var books = bookService.All(query.SearchTerm, query.CurrentPage, AllBooksQueryModel.BooksPerPage);
+            var userId =  userManager.GetUserId(this.User);
+            var currentUserBooks = data.Users.Where(x=>x.Id == userId).SelectMany(x=>x.Books).ToList();
+            var books = bookService.All(query.SearchTerm, query.CurrentPage,
+                AllBooksQueryModel.BooksPerPage,currentUserBooks);
 
             query.TotalBooks = books.TotalBooks;
             query.Books = books.Books.Select(b => new AllBooksViewModel
@@ -45,6 +48,7 @@ namespace BookLibrary.Controllers
                 Id = b.Id,
                 Title = b.Title,
                 ImageUrl = b.ImageUrl,
+                IsAvailableToAddByUser = b.IsAvailableToAddByUser,
             });
 
             return View(query);
