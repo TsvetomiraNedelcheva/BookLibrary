@@ -11,27 +11,25 @@
 }
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="card-deck">
-            @foreach (var book in Model.Books)
-            {
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
-                    <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
-                    </div>
-                    <div class="card-body">
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
-                        <form method="post">
-                        <button asp-controller="Book" asp-action="RemoveFromBookList" asp-route-id="@book.Id" class="btn btn-danger">Remove</button>
-                        </form>
-                        <form method="get">
-                            <button asp-route-id="@book.Id" asp-controller="Book" asp-action="Review" type="submit" class="btn btn-primary">Leave a Review </button>
-                        </form>
-                    </div>
+    <div class="card-deck">
+        @foreach (var book in Model.Books)
+        {
+            <div class="card col-md-4">
+                <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
                 </div>
-            }
-        </div>
+                <div class="card-body">
+                    <form method="post">
+                        <button asp-controller="Book" asp-action="RemoveFromBookList" asp-route-id="@book.Id" class="btn btn-danger btn-sm btn-block mb-1">Remove</button>
+                    </form>
+                    <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block mb-1 ">Details</button>
+                    <form method="get">
+                        <button asp-route-id="@book.Id" asp-controller="Book" asp-action="Review" type="submit" class="btn btn-primary btn-sm btn-block mb-1">Leave a Review </button>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -65,5 +63,4 @@
     asp-route-currentPage="@(Model.CurrentPage + 1)"
     asp-route-searchTerm="@Model.SearchTerm">Next</a>
     </div>
-    </div>
-*@
+    </div>*@
