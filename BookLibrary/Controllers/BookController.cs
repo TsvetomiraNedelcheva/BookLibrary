@@ -61,6 +61,17 @@ namespace BookLibrary.Controllers
             return RedirectToAction("MyBooks", "User");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromBookList(string id)
+        {
+            var user = await userManager.GetUserAsync(this.User);
+            var userId = await userManager.GetUserIdAsync(user);
+
+            await bookService.RemoveFromBookList(id, userId);
+
+            return RedirectToAction("MyBooks", "User");
+        }
+
         public IActionResult Edit(string id)
         {
             var book = bookService.EditDetails(id);
@@ -130,6 +141,7 @@ namespace BookLibrary.Controllers
                 Pages = book.Pages,
                 Authors = book.Authors,
                 Publisher = book.Publisher,
+                Users = book.Users,
                 Reviews = book.Reviews,
                 Genres = book.Genres
             });

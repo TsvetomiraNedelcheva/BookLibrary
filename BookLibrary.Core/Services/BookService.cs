@@ -67,6 +67,14 @@ namespace BookLibrary.Core.Services
             await data.SaveChangesAsync();
         }
 
+        public async Task RemoveFromBookList(string bookId, string userId)
+        {
+            var bookToRemove = await data.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+            var user = await data.ApplicationUsers.Include(x=>x.Books).FirstOrDefaultAsync(a => a.Id == userId);
+            user.Books.Remove(bookToRemove);
+            await data.SaveChangesAsync();
+        }
+
         public BookEditDetailsServiceModel EditDetails(string id)
         {
             var authorsList = new List<AuthorImagesServiceModel>();
@@ -276,6 +284,7 @@ namespace BookLibrary.Core.Services
                   ImageUrl = b.ImageUrl,
                   Authors = b.Authors.Select(x => x.Name.ToString()).ToList(),
                   Genres = b.Genres.Select(x => x.Name.ToString()).ToList(),
+                  Users = b.Reviews.Select(x=>x.User).ToList(),
                   Reviews = b.Reviews,
                   Publisher = b.Publisher.Name
               }).FirstOrDefault();

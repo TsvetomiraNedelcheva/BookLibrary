@@ -65,27 +65,32 @@
                         </table>
                     </div>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-12 col-lg-12">
-                        <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-                            <div class="card-body p-4">
-                                @foreach (var review in Model.Reviews)
-                                {
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <p>@review.Text</p>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <p class="small mb-0 ms-2">@review.User</p>
+                @if (@Model.Reviews.Any())
+                {
+                    <h4>Reviews:</h4>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                                <div class="card-body p-4">
+                                    @foreach (var review in Model.Reviews)
+                                    {
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <p>@review.Text</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex flex-row align-items-center">
+                                                        <p class="small mb-0 ms-2">Posted by: @review.User.UserName</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     </div>

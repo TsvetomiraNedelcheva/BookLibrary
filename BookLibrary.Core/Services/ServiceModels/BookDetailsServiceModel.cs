@@ -10,6 +10,7 @@ namespace BookLibrary.Core.Services
         public string ImageUrl { get; set; }
         public int Pages { get; set; }
         public string Publisher { get; set; }
+        public IEnumerable<ApplicationUser> Users { get; set; }
         public IEnumerable<string> Authors { get; set; }
         public IEnumerable<string> Genres { get; set; }
         public IEnumerable<Review> Reviews { get; set; }

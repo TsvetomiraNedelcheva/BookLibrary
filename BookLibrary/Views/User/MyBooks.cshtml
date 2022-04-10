@@ -21,8 +21,10 @@
                         <h5 class="card-title">@book.Title</h5>
                     </div>
                     <div class="card-body">
-                        <a href="#" class="card-link">Details</a>
-                        <a href="#" class="card-link">Remove</a>
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="card-link">Details</a>
+                        <form method="post">
+                        <button asp-controller="Book" asp-action="RemoveFromBookList" asp-route-id="@book.Id" class="btn btn-danger">Remove</button>
+                        </form>
                         <form method="get">
                             <button asp-route-id="@book.Id" asp-controller="Book" asp-action="Review" type="submit" class="btn btn-primary">Leave a Review </button>
                         </form>
