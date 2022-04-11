@@ -23,7 +23,9 @@
                     <form method="post">
                         <button asp-controller="Book" asp-action="RemoveFromBookList" asp-route-id="@book.Id" class="btn btn-danger btn-sm btn-block mb-1">Remove</button>
                     </form>
-                    <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block mb-1 ">Details</button>
+                    <form>
+                        <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block mb-1 ">Details</button>
+                    </form>                 
                     <form method="get">
                         <button asp-route-id="@book.Id" asp-controller="Book" asp-action="Review" type="submit" class="btn btn-primary btn-sm btn-block mb-1">Leave a Review </button>
                     </form>
