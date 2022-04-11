@@ -1,4 +1,6 @@
-﻿using BookLibrary.Infrastructure.Data;
+﻿using BookLibrary.Core.Services;
+using BookLibrary.Core.Services.ServiceModels;
+using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -11,26 +13,27 @@ namespace BookLibrary.Controllers
         private readonly ApplicationDbContext data;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        public UserController(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager)
+        private readonly IUserService userService;
+        public UserController(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager, IUserService _userService)
         {
             data = _data;
             userManager = _userManager;
             roleManager = _roleManager;
+            userService = _userService;
         }
-        public async Task<IActionResult> MyBooks()      
+        public async Task<IActionResult> MyBooks(MyBooksViewModel model)      
         {
             var user = await userManager.GetUserAsync(this.User);
-            var userBooks = data.ApplicationUsers.Where(x => x.Id == user.Id).SelectMany(x => x.Books).Where(b => b.IsDeleted == false).ToList();
-
-            var vm = new UserViewModel
+            var books = userService.MyBooks( user , model.CurrentPage, MyBooksViewModel.BooksPerPage);
+            model.TotalBooks = books.TotalBooks; 
+            model.Books = books.Books.Select(b => new BookServiceModel
             {
-                UserName = user.UserName,
-                FisrtName = user.FisrtName,
-                LastName = user.LastName,
-                Books = userBooks
-            };
+                Id = b.Id,
+                Title = b.Title,
+                ImageUrl = b.ImageUrl
+            }).ToList();
 
-            return View(vm);
+            return View(model);
         }
     }
 }
