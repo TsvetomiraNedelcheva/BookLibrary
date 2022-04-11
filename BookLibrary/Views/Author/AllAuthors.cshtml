@@ -15,18 +15,20 @@
 </form>
 
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card-deck ">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card-deck justify-content-center ">
             @foreach (var author in Model.Authors)
             {
-                <div class="card" style="width:100%;">
-                    <img class="card-img-top" src="@author.ImageUrl" alt="@author.Name">
-                    <div class="card-body">
-                        <h5 class="card-title">@author.Name</h5>
-                    </div>
-                    <div class="card-body">
-                        <a asp-controller="Author" asp-action="AuthorDetails" asp-route-id="@author.Id" class="card-link">View books</a>
+                <div class="card-deck col-md-3 m-3">
+                    <div class="card">
+                        <img class="card-img-top" src="@author.ImageUrl" alt="@author.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">@author.Name</h5>
+                        </div>
+                        <div class="card-body">
+                            <a asp-controller="Author" asp-action="AuthorDetails" asp-route-id="@author.Id" class="card-link">View books</a>
+                        </div>
                     </div>
                 </div>
             }

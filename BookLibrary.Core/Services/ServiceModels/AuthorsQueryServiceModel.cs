@@ -6,7 +6,7 @@ namespace BookLibrary.Core.Services.ServiceModels
     {
         public string Id { get; set; }
 
-        public const int AuthorsPerPage = 4;
+        public const int AuthorsPerPage = 3;
         public int CurrentPage { get; set; } = 1;
         public int TotalAuthors { get; set; }
 

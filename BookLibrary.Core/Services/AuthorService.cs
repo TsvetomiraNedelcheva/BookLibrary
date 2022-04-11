@@ -57,6 +57,7 @@ namespace BookLibrary.Core.Services
                 authorQuery = authorQuery.Where(a => a.Name.ToLower().Contains(searchTerm.ToLower()));
             }
             var authors = authorQuery
+                .Where(a => a.Books.Any(b => b.IsDeleted == false))
                 .Skip((currentPage - 1) * authorsPerPage)
                 .Take(authorsPerPage)
                 .OrderByDescending(b => b.Id)
