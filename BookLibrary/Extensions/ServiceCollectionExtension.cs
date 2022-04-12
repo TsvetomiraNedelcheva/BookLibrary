@@ -13,6 +13,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthorService, AuthorService>();
+        services.AddScoped<IHomeService, HomeService>();
         return services;
     }
 

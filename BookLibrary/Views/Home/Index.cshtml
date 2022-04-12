@@ -1,5 +1,5 @@
-﻿@model IEnumerable<AllBooksViewModel>
-
+﻿
+@model HomePageBooksViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,7 +7,7 @@
 <h4 class="text-center mb-3"><a asp-controller="Book" asp-action="All" style="color:black">Start browsing books from A to Z!</a></h4>
 <div class="container">
     <div class="row justify-content-center">
-        @foreach (var book in Model)
+        @foreach (var book in Model.Books)
         {
             <div class="card-deck col-md-3 m-3">
                 <div class="card">
@@ -16,19 +16,25 @@
                         <h5 class="card-title">@book.Title</h5>
                     </div>
                     <div class="card-body">
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <button asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning mb-1 btn-sm btn-block">Edit</button>
-                                <form method="post">
-                                    <button id="deleteItem" asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" onclick="return confirm('Are you sure you want to delete this book?');" class="btn btn-danger mb-1 btn-sm btn-block">Delete</button>
-                                </form>
-                            }
-                            <form>
-                                <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block">Details</button>
-                            </form>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning mb-1 btn-sm btn-block">Edit</button>
                             <form method="post">
-                                <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary mt-1 btn-sm btn-block">Add to My Books </button>
+                                <button id="deleteItem" asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" onclick="return confirm('Are you sure you want to delete this book?');" class="btn btn-danger mb-1 btn-sm btn-block">Delete</button>
                             </form>
+                        }
+                        <form>
+                            <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block">Details</button>
+                        </form>
+
+                        <br/>
+
+                        @if (book.IsAvailableToAddByUser)
+                        {
+                            <form method="post">
+                                <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary btn-sm btn-block">Add to My Books </button>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>

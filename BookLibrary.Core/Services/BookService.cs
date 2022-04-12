@@ -1,10 +1,8 @@
-﻿using BookLibrary.Core.Services.ServiceModels;
-using BookLibrary.Infrastructure.Data;
+﻿using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Infrastructure.Data.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace BookLibrary.Core.Services
 {
