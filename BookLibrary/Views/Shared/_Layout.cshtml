@@ -52,16 +52,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li class="nav-item d-none d-sm-inline-block">
                     <a asp-area="" asp-controller="User" asp-action="MyBooks" class="nav-link">My Books</a>
                 </li>
-                
+
             </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
+                @if (User.IsInRole("Admin"))
+                { //doesn't work with the area
+                    <li class="nav-item">
+                         <a href="/Administration/Home/Index" class="nav-link btn btn-link text-dark">Administration</a>
+                    </li>
+                }
                 <li class="nav-item">
                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                         <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
                     </form>
+                </li>
+
             </ul>
         </nav>
         <!-- /.navbar -->

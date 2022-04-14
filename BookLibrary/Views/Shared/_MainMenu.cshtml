@@ -10,5 +10,49 @@
                 </p>
             </a>
         </li>
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a href="/Book/Add" class="nav-link">
+                    <i class="fa fa-solid fa-plus"></i>
+                    <p>
+                        Add Book
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Administration/Home/Index" class="nav-link">
+                    <i class="fa fa-solid fa-user-lock"></i>
+                    <p>
+                        Administration
+                    </p>
+                </a>
+            </li>
+        }
+        <li class="nav-item">
+            <a href="/Book/All" class="nav-link">
+                <i class="fa fa-solid fa-book"></i>
+                <p>
+                    All Books
+                </p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/Author/AllAuthors" class="nav-link">
+                <i class="fa fa-solid fa-pen"></i>
+                <p>
+                    All Authors
+                </p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/User/MyBooks" class="nav-link">
+                <i class="fa fa-solid fa-bookmark"></i>
+                <p>
+                    My Books
+                </p>
+            </a>
+        </li>
+
     </ul>
 </nav>
