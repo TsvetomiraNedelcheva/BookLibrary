@@ -24,7 +24,7 @@ namespace BookLibrary.Core.Services
                {
                    Id = b.Id,
                    Title = b.Title,
-                   ImageUrl = b.ImageUrl,
+                   Image = b.BookImage.RemoteImageUrl,
                })
                .Take(3)
                .ToList();

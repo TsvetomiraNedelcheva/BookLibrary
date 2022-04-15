@@ -8,8 +8,8 @@ namespace BookLibrary.Models.Books
         [MinLength(5)]
         public string Name { get; set; }
 
-        [Required]
-        [MinLength(1)]
-        public string AuthorImageUrl { get; set; }
+        public string? AuthorImageUrl { get; set; }
+
+        public IFormFile AuthorImage { get; set; }
     }
 }

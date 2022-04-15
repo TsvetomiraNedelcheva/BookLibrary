@@ -19,8 +19,8 @@ namespace BookLibrary.Infrastructure.Data.Models
         [Required]
         public string Name { get; set; }
 
-        public string ImageUrl { get; set; }
-
+        [Required]
+        public AuthorImage AuthorImage { get; set; }
         public ICollection<Book> Books { get; set; }
         public ICollection<Genre> Genres { get; set; }
 

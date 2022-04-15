@@ -30,7 +30,7 @@ namespace BookLibrary.Controllers
             {
                 Id = b.Id,
                 Title = b.Title,
-                ImageUrl = b.ImageUrl
+                Image = b.Image
             }).ToList();
 
             return View(model);

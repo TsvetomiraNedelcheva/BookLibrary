@@ -20,9 +20,12 @@ namespace BookLibrary.Models.Books
         [Range(MinPagesValue, MaxPagesValue, ErrorMessage = "The value must be between {1} and {2}.")]
         public int Pages { get; set; }
 
+        //[Required]
+        //[Display(Name = "Image Link")]
+        //public string ImageUrl { get; set; }
+
         [Required]
-        [Display(Name = "Image Link")]
-        public string ImageUrl { get; set; }
+        public IFormFile Image { get; set; }
 
         [Required]
         [StringLength(MaxPublisherNameLength, MinimumLength = MinPublisherNameLength,

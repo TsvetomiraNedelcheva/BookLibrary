@@ -6,6 +6,8 @@
         public string Title { get; set; }
         public string ImageUrl { get; set; }
 
+        public string Image { get; set; }
+
         public bool IsAvailableToAddByUser { get; set; } = true;
     }
 }

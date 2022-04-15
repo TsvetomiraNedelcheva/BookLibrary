@@ -37,6 +37,8 @@ namespace BookLibrary.Infrastructure.Data
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<BookImage> BookImages { get; set; }
+        public DbSet<AuthorImage> AuthorImages { get; set; }
 
     }
 }

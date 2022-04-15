@@ -1,7 +1,4 @@
 ﻿using BookLibrary.Core.Services;
-using BookLibrary.Infrastructure.Data.Models;
-using System.ComponentModel.DataAnnotations;
-using static BookLibrary.Infrastructure.Data.DataConstants;
 
 namespace BookLibrary.Models.Users
 {

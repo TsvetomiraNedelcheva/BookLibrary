@@ -14,10 +14,12 @@ namespace BookLibrary.Models.Books
             ErrorMessage = "The field must be between {2} and {1} characters.")]
         public string Title { get; set; }
 
-        [Required]
-        [Url]
-        [Display(Name = "Image URL")]
-        public string ImageUrl { get; set; }
+        //[Required]
+        //[Url]
+        //[Display(Name = "Image URL")]
+        //public string ImageUrl { get; set; }
+
+        public string Image { get; set; }
         public bool IsDeleted { get; set; } 
         public IEnumerable<AuthorImagesViewModel> Authors { get; set; }
         public ICollection<GenreType> Genres { get; set; }

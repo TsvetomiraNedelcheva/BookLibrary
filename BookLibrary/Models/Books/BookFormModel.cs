@@ -18,17 +18,21 @@ namespace BookLibrary.Models.Books
 
         [Required]
         [Range(MinPagesValue, MaxPagesValue, ErrorMessage = "The value must be between {1} and {2}.")]
+
         public int Pages { get; set; }
 
         [Required]
-        [Display(Name = "Image Link")]
-        public string ImageUrl { get; set; }
+        public IFormFile Image { get; set; }
 
         [Required]
         [StringLength(MaxPublisherNameLength, MinimumLength = MinPublisherNameLength,
             ErrorMessage = "The field must be between {2} and {1} characters.")]
         public string Publisher { get; set; }
+
+        [Required]
         public IEnumerable<AuthorImagesViewModel> Authors { get; set; }
+
+         [Required]
         public ICollection<GenreType> Genres { get; set; }
     }
 }

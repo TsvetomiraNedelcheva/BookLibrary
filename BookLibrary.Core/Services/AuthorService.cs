@@ -13,15 +13,17 @@ namespace BookLibrary.Core.Services
 
         public AuthorDetailsServiceModel AuthorDetails(string id)
         {
-            var authorBooks = data.Authors.Where(a => a.Id == id).SelectMany(a => a.Books.Where(b => b.IsDeleted == false)).ToList();
+            var authorBooks = data.Authors.Where(a => a.Id == id)
+                .SelectMany(a => a.Books.Where(b => b.IsDeleted == false)).ToList();
             var bookList = new List<BookDetailsServiceModel>();
             foreach (var book in authorBooks)
             {
+                var bookImage = data.Books.Where(b => b.Id == book.Id).Select(x=>x.BookImage.RemoteImageUrl).FirstOrDefault();
                 var bookToAddToList = new BookDetailsServiceModel
                 {
                     Id = book.Id,
                     Title = book.Title,
-                    ImageUrl = book.ImageUrl,
+                    Image = bookImage,
                     Description = book.Description,
                     Pages = book.Pages,
                     Authors = book.Authors.Select(x => x.Name.ToString()).ToList(),
@@ -38,7 +40,7 @@ namespace BookLibrary.Core.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    ImageUrl = a.ImageUrl,
+                    Image = a.AuthorImage.RemoteImageUrl,
                     Books = bookList
                 }).FirstOrDefault();
 
@@ -65,7 +67,7 @@ namespace BookLibrary.Core.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    ImageUrl = a.ImageUrl,
+                    Image = a.AuthorImage.RemoteImageUrl,
                 })
                 .ToList();
 

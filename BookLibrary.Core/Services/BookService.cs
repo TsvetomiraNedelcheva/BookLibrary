@@ -1,8 +1,11 @@
 ﻿using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.Infrastructure.Data.Models.Enums;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using CloudinaryDotNet;
 
 namespace BookLibrary.Core.Services
 {
@@ -10,10 +13,12 @@ namespace BookLibrary.Core.Services
     {
         private readonly ApplicationDbContext data;
         private readonly UserManager<ApplicationUser> userManager;
-        public BookService(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager)
+        private readonly Cloudinary cloudinary;
+        public BookService(ApplicationDbContext _data, UserManager<ApplicationUser> _userManager, Cloudinary _cloudinary)
         {
             data = _data;
             userManager = _userManager;
+            cloudinary = _cloudinary;
         }
         public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage,List<Book> currentUserBooks)
         {
@@ -33,7 +38,7 @@ namespace BookLibrary.Core.Services
                 {
                     Id = b.Id,
                     Title = b.Title,
-                    ImageUrl = b.ImageUrl,                
+                    Image = b.BookImage.RemoteImageUrl,                
                 })
                 .ToList();
 
@@ -91,7 +96,7 @@ namespace BookLibrary.Core.Services
                 authorsList.Add(new AuthorImagesServiceModel
                 {
                     Name = author.Name,
-                    AuthorImageUrl = author.ImageUrl
+                   // AuthorImage = author.AuthorImage.RemoteImageUrl
                 });
             }
 
@@ -114,7 +119,7 @@ namespace BookLibrary.Core.Services
                     Title = b.Title,
                     Description = b.Description,
                     Pages = b.Pages,
-                    ImageUrl = b.ImageUrl,
+                    Image = b.BookImage.RemoteImageUrl,
                     Authors = authorsList,
                     Genres = genresList,
                     Publisher = b.Publisher.Name
@@ -123,7 +128,7 @@ namespace BookLibrary.Core.Services
             return book;
         }
 
-        public void Edit(string id, string title, string description, string imageURL, int pages, string publisher,
+        public async Task Edit(string id, string title, string description, IFormFile image, int pages, string publisher,
             string authorsInput, List<string> genres)
         {
             var authorsNamesList = authorsInput.Split(","); //array of the names
@@ -150,7 +155,6 @@ namespace BookLibrary.Core.Services
                     var newAuthor = new Author()
                     {
                         Name = authorName,
-                        ImageUrl = "" // ?
 
                     };
                     newAuthor.Books.Add(bookData);
@@ -174,70 +178,14 @@ namespace BookLibrary.Core.Services
 
             foreach (var editedGenre in genres)
             {
-                if (editedGenre == GenreType.Classics.ToString())
+                
+                var genreEnum = Enum.Parse<GenreType>(editedGenre);
+                var newGenre = new Genre()
                 {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Classics
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Fiction.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Fiction
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.NonFiction.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.NonFiction
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Science.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Science
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Fantasy.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Fantasy
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Romance.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Romance
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Thriller.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Thriller
-                    };
-                    genresList.Add(newGenre);
-                }
-                else if (editedGenre == GenreType.Biography.ToString())
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = GenreType.Biography
-                    };
-                    genresList.Add(newGenre);
-                }
+                    Name = genreEnum
+                };
+                //TODO if genre is not already in the DB 
+                genresList.Add(newGenre);
             }
 
 
@@ -260,14 +208,25 @@ namespace BookLibrary.Core.Services
                 newPublisher = bookPublisher;
             }
 
+            if (image != null)
+            {
+                var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, image); //returns link of the image
+                bookData.BookImage = new BookImage
+                {
+                    Book = bookData,
+                    RemoteImageUrl = resultUrl,
+                    BookId = bookData.Id
+                };
+                bookData.BookImage.RemoteImageUrl = resultUrl;
+            }
+
             bookData.Title = title;
             bookData.Description = description;
             bookData.Pages = pages;
-            bookData.ImageUrl = imageURL;
             bookData.Publisher = newPublisher;
             bookData.Genres = genresList;
 
-            data.SaveChanges();
+            await data.SaveChangesAsync();
         }
 
         public void Delete(string id)
@@ -288,7 +247,7 @@ namespace BookLibrary.Core.Services
                   Title = b.Title,
                   Description = b.Description,
                   Pages = b.Pages,
-                  ImageUrl = b.ImageUrl,
+                  Image = b.BookImage.RemoteImageUrl,
                   Authors = b.Authors.Select(x => x.Name.ToString()).ToList(),
                   Genres = b.Genres.Select(x => x.Name.ToString()).ToList(),
                   Users = b.Reviews.Select(x=>x.User).ToList(),
@@ -299,7 +258,7 @@ namespace BookLibrary.Core.Services
             return book;
         }
 
-        public void Add(string title, string description, int pages, string imageUrl, string publisher, IEnumerable<AuthorImagesServiceModel> authors, ICollection<GenreType> genres)
+        public async Task Add(string title, string description, int pages, IFormFile image, string publisher, IEnumerable<AuthorImagesServiceModel> authors, ICollection<GenreType> genres)
         {
             var genresList = new List<Genre>();
             foreach (var item in genres)
@@ -312,29 +271,43 @@ namespace BookLibrary.Core.Services
                 Title = title,
                 Description = description,
                 Pages = pages,
-                ImageUrl = imageUrl,
                 Publisher = new Publisher { Name = publisher },
                 Genres = genresList,
-            };
+            };       
 
             foreach (var inputAuthor in authors)
             {
-                var author = data.Authors.FirstOrDefault(a => a.Name == inputAuthor.Name);
+                var author = await data.Authors.FirstOrDefaultAsync(a => a.Name == inputAuthor.Name);
                 if (author == null)
                 {
+                    var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, inputAuthor.AuthorImage); //returns link of the image
                     author = new Author()
                     {
                         Name = inputAuthor.Name,
-                        ImageUrl = inputAuthor.AuthorImageUrl
                     };
-                    data.Authors.Add(author);
+                    author.AuthorImage = new AuthorImage()
+                    {
+                        RemoteImageUrl = resultUrl
+                    };
+                   await data.Authors.AddAsync(author);
                 }
 
                 newBook.Authors.Add(author);
             }
 
-            data.Books.Add(newBook);
-            data.SaveChanges();
+            if (image != null)
+            {
+                var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, image); //returns link of the image
+                newBook.BookImage = new BookImage
+                {
+                    Book = newBook,
+                    RemoteImageUrl = resultUrl,
+                    BookId = newBook.Id
+                };
+            }
+
+           await data.Books.AddAsync(newBook);
+           await data.SaveChangesAsync();
         }
 
         public void LeaveReview(string bookId, string userId, string content)

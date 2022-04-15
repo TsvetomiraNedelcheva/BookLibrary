@@ -29,7 +29,7 @@ namespace BookLibrary.Core.Services
                 .Select(b => new BookServiceModel
                 {
                     Id = b.Id,
-                    ImageUrl = b.ImageUrl,
+                    Image = b.BookImage.RemoteImageUrl,
                     Title = b.Title,
                 })
                 .ToList();

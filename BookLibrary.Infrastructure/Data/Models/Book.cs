@@ -28,7 +28,8 @@ namespace BookLibrary.Infrastructure.Data.Models
         public string Description { get; set; }
         public int Pages { get; set; }
 
-        public string ImageUrl { get; set; }
+        [Required]
+        public BookImage BookImage { get; set; }
 
         [Required]
         public string PublisherId { get; set; }

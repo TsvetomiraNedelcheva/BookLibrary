@@ -33,7 +33,8 @@ namespace BookLibrary.Controllers
             {
                 Id = b.Id,
                 Title = b.Title,
-                ImageUrl = b.ImageUrl,
+                //ImageUrl = b.ImageUrl,
+                Image = b.Image,
                 IsAvailableToAddByUser = b.IsAvailableToAddByUser,
             });
 

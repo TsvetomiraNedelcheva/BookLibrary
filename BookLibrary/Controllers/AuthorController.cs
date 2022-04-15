@@ -21,7 +21,7 @@ namespace BookLibrary.Controllers
             {
                 Id = a.Id,
                 Name = a.Name,
-                ImageUrl = a.ImageUrl,
+                Image = a.Image,
             });
 
             return View(query);
@@ -35,7 +35,7 @@ namespace BookLibrary.Controllers
             {
                 Id = author.Id,
                 Name = author.Name,
-                ImageUrl = author.ImageUrl,
+                Image = author.Image,
                 Books = author.Books
             });
         }

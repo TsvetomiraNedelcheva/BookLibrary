@@ -5,7 +5,7 @@
         public const int MaxBookTitleLength = 60;
         public const int MinBookTitleLength = 4;
 
-        public const int MaxBookDescriptionLength = 500;
+        public const int MaxBookDescriptionLength = 1500;
         public const int MinBookDescriptionLength = 10;
 
         public const int MaxAuthorNameLength = 50;

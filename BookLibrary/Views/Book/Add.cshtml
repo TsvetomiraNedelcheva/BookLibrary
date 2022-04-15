@@ -7,39 +7,40 @@
     <div class="row">
         <div class="col-6 offset-3">
             <h2 class="heading-margin text-center">Add Book</h2>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" placeholder="Enter title here">
+                    <input asp-for="Title" class="form-control" placeholder="Enter title here" required>
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description"></label>
-                    <textarea asp-for="Description" class="form-control" placeholder="Enter description of the book here" rows="3"></textarea>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter description of the book here" rows="3" required></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ImageUrl"></label>
-                    <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url of the book cover here">
-                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    <label asp-for="Image"></label>
+                    <input asp-for="Image" class="form-control" required />
+                    <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
-                <div  id="AuthorsContainer">
+                <div id="AuthorsContainer">
                     <label asp-for="Authors"></label>
                     <a class="btn btn-success" onclick="AddAnotherAuthor()">+</a>
+                     <span asp-validation-for="Authors" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Pages"></label>
-                    <input asp-for="Pages" class="form-control" type="number" placeholder="Enter number of pages here">
+                    <input asp-for="Pages" class="form-control" type="number" placeholder="Enter number of pages here" required>
                     <span asp-validation-for="Pages" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Publisher"></label>
-                    <input asp-for="Publisher" class="form-control" placeholder="Enter publisher name here">
+                    <input asp-for="Publisher" class="form-control" placeholder="Enter publisher name here" required>
                     <span asp-validation-for="Publisher" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Genres"></label>
-                    <select multiple class="form-control" asp-for="Genres" asp-items="@Html.GetEnumSelectList<GenreType>()">
+                    <select multiple class="form-control" asp-for="Genres" asp-items="@Html.GetEnumSelectList<GenreType>()" required>
                     </select>
                     <span asp-validation-for="Genres" class="text-danger"></span>
                 </div>
@@ -48,12 +49,12 @@
 
             @section Scripts {
             <script>
-                var authorIndex = 0;
-                function AddAnotherAuthor(){
-                     $("#AuthorsContainer").
-                append("<div class='form-control'>Name: <input type='text' name='Authors[" + authorIndex + "].Name' /> Image URL: <input type='text' name='Authors[" + authorIndex +"].AuthorImageUrl' /></div>");
-            authorIndex++;
-                }
+                    var authorIndex = 0;
+                    function AddAnotherAuthor(){
+                         $("#AuthorsContainer").
+                    append("<div class='form-control'>Name: <input type='text' name='Authors[" + authorIndex + "].Name' required/> Image: <input type='file' name='Authors[" + authorIndex +"].AuthorImage' required /></div> <br/>");
+                authorIndex++;
+                    }
             </script>
             }
         </div>

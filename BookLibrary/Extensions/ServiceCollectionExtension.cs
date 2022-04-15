@@ -1,13 +1,25 @@
 ﻿using BookLibrary.Core.Services;
 using BookLibrary.Infrastructure.Data;
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtension
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, WebApplicationBuilder builder)
     {
+        Account account = new Account
+        {
+            ApiKey = builder.Configuration.GetValue<string>("ApiKey"),
+            ApiSecret = builder.Configuration.GetValue<string>("ApiSecret"),
+            Cloud = builder.Configuration.GetValue<string>("Cloud"),
+        };
+
+        var cloudinary = new Cloudinary(account);
+
+        services.AddSingleton(cloudinary);
+
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthorService, AuthorService>();

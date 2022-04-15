@@ -24,15 +24,15 @@ namespace BookLibrary.Controllers
         public IActionResult Add() => View();
 
         [HttpPost]
-        public IActionResult Add(BookFormServiceModel book)
+        public async Task<IActionResult> Add(BookFormServiceModel book)
         {
             if (!ModelState.IsValid)
             {
                 return View(book);
             }
-            bookService.Add(book.Title, book.Description, book.Pages, book.ImageUrl, book.Publisher, book.Authors, book.Genres);
+           await bookService.Add(book.Title, book.Description, book.Pages, book.Image, book.Publisher, book.Authors, book.Genres);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("All", "Book");
         }
 
         public IActionResult All([FromQuery] AllBooksQueryModel query)
@@ -47,7 +47,7 @@ namespace BookLibrary.Controllers
             {
                 Id = b.Id,
                 Title = b.Title,
-                ImageUrl = b.ImageUrl,
+                Image = b.Image,
                 IsAvailableToAddByUser = b.IsAvailableToAddByUser,
             });
 
@@ -97,7 +97,7 @@ namespace BookLibrary.Controllers
             {
                 Title = book.Title,
                 Description = book.Description,
-                ImageUrl = book.ImageUrl,
+               // Image = book.Image,
                 Pages = book.Pages,
                 Authors = authorsString,
                 Publisher = book.Publisher,
@@ -106,7 +106,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, EditBookFormModel book)
+        public async Task<IActionResult> Edit(string id, EditBookFormModel book)
         {
             var authorsString = "";
             var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
@@ -122,7 +122,7 @@ namespace BookLibrary.Controllers
                 genresList.Add(genre.ToString());
             }
 
-            bookService.Edit(id, book.Title, book.Description, book.ImageUrl, book.Pages, book.Publisher, authorsString.TrimEnd(','), genresList);
+            await bookService.Edit(id, book.Title, book.Description, book.Image, book.Pages, book.Publisher, authorsString.TrimEnd(','), genresList);
             return RedirectToAction("All", "Book");
         }
 
@@ -141,7 +141,7 @@ namespace BookLibrary.Controllers
             {
                 Title = book.Title,
                 Description = book.Description,
-                ImageUrl = book.ImageUrl,
+                Image = book.Image,
                 Pages = book.Pages,
                 Authors = book.Authors,
                 Publisher = book.Publisher,

@@ -24,7 +24,7 @@ builder.Services.AddControllersWithViews()
         options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
     });
 
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder);
 
 var app = builder.Build();
 
