@@ -8,15 +8,6 @@
 @{
     string GetAuthorNames()
     {
-        //StringBuilder sb = new StringBuilder();
-
-        //@foreach(var author in Model.Authors)
-        //{
-        //    sb.Append(author.Name + ",");
-        //}
-
-        //return sb.ToString();
-        //var authors = Model.Authors.Split(",").ToList();
         return Model.Authors.ToString();
     }
 }
@@ -35,19 +26,13 @@
                     <textarea asp-for="Description" class="form-control" placeholder="Enter description of the book here" rows="3"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-               @* <div class="form-group">
-                    <label asp-for="ImageUrl"></label>
-                    <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url of the book cover here">
-                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                </div>*@
                 <div class="form-group">
                     <label asp-for="Image"></label>
                     <input asp-for="Image" class="form-control" />
                     <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
                 <div id="AuthorsContainer" class="text-dark">
-                    <label asp-for="Authors"></label>
-    @*                    <a class="btn btn-success" onclick="AddAnotherAuthor()">+</a>*@   
+                    <label asp-for="Authors"></label>  
                         <br />
                     <input asp-for="Authors" id="input" type="text" class="bg-dark"  data-role="tagsinput" value="@GetAuthorNames()"/>
                 </div>
@@ -72,13 +57,6 @@
 
             @section Scripts {
             <script>
-                //    var authorIndex = 0;
-                //    function AddAnotherAuthor(){
-                //         $("#AuthorsContainer").
-                //    append("<div class='form-control'>Name: <input type='text' name='Authors[" + authorIndex + "].Name' /> Image URL: <input type='text' name='Authors[" + authorIndex +"].AuthorImageUrl' /></div>");
-                //authorIndex++;
-                //    }
-               //  $("#input").tagsinput('items');
                $("input").val()
             </script>
             }
