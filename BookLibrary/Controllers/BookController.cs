@@ -108,6 +108,10 @@ namespace BookLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditBookFormModel book)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(book);
+            }
             var authorsString = "";
             var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
             var bookAuthors = book.Authors.Split(",").ToList();
