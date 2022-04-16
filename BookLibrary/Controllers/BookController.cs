@@ -24,7 +24,7 @@ namespace BookLibrary.Controllers
         public IActionResult Add() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Add(BookFormServiceModel book)
+        public async Task<IActionResult> Add(BookFormModel book)
         {
             if (!ModelState.IsValid)
             {

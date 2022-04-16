@@ -1,4 +1,5 @@
-﻿using BookLibrary.Infrastructure.Data.Models.Enums;
+﻿using BookLibrary.Core.Services;
+using BookLibrary.Infrastructure.Data.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using static BookLibrary.Infrastructure.Data.DataConstants;
 
@@ -30,7 +31,7 @@ namespace BookLibrary.Models.Books
         public string Publisher { get; set; }
 
         [Required]
-        public IEnumerable<AuthorImagesViewModel> Authors { get; set; }
+        public IEnumerable<AuthorImagesServiceModel> Authors { get; set; }
 
          [Required]
         public ICollection<GenreType> Genres { get; set; }
