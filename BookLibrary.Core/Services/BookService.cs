@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using CloudinaryDotNet;
+using System.Linq;
 
 namespace BookLibrary.Core.Services
 {
@@ -96,7 +97,6 @@ namespace BookLibrary.Core.Services
                 authorsList.Add(new AuthorImagesServiceModel
                 {
                     Name = author.Name,
-                   // AuthorImage = author.AuthorImage.RemoteImageUrl
                 });
             }
 
@@ -133,7 +133,7 @@ namespace BookLibrary.Core.Services
         {
             var authorsNamesList = authorsInput.Split(","); //array of the names
 
-            var bookData = data.Books.FirstOrDefault(x => x.Id == id); //the book
+            var bookData = data.Books.Include(x=>x.Genres).FirstOrDefault(x => x.Id == id); //the book
             var bookAuthors = data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList(); //bookAuthors
 
             var authorsList = new List<Author>(); //list of authors to be mapped              
@@ -173,21 +173,18 @@ namespace BookLibrary.Core.Services
 
 
             var bookGenres = data.Books.Where(x => x.Id == id).SelectMany(x => x.Genres).ToList();
+
             var genresList = new List<Genre>();
-
-
             foreach (var editedGenre in genres)
-            {
-                
-                var genreEnum = Enum.Parse<GenreType>(editedGenre);
-                var newGenre = new Genre()
-                {
-                    Name = genreEnum
-                };
-                //TODO if genre is not already in the DB 
+            {       
+                    var genreEnum = Enum.Parse<GenreType>(editedGenre);
+                    var newGenre = new Genre()
+                    {
+                        Name = genreEnum
+                    };
                 genresList.Add(newGenre);
             }
-
+            genresList = genresList.Except(bookGenres).ToList();
 
             var bookPublisher = data.Books.Where(x => x.Id == id).Select(x => x.Publisher).FirstOrDefault();
             Publisher newPublisher;
@@ -283,12 +280,13 @@ namespace BookLibrary.Core.Services
                     var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, inputAuthor.AuthorImage); //returns link of the image
                     author = new Author()
                     {
-                        Name = inputAuthor.Name,
+                        Name = inputAuthor.Name
                     };
                     author.AuthorImage = new AuthorImage()
                     {
                         RemoteImageUrl = resultUrl
                     };
+                   //await data.AuthorImages.AddAsync(author.AuthorImage);
                    await data.Authors.AddAsync(author);
                 }
 
