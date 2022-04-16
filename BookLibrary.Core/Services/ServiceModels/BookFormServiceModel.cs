@@ -21,10 +21,6 @@ namespace BookLibrary.Core.Services.ServiceModels
         [Range(MinPagesValue, MaxPagesValue, ErrorMessage = "The value must be between {1} and {2}.")]
         public int Pages { get; set; }
 
-        //[Required]
-        //[Display(Name = "Image Link")]
-        //public string ImageUrl { get; set; }
-
         [Required]
         public IFormFile Image { get; set; }
 
