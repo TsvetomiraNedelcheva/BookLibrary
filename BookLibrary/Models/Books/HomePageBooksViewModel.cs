@@ -10,5 +10,8 @@
         public bool IsDeleted { get; set; }
         public bool IsAvailableToAddByUser { get; set; }
         public IEnumerable<AllBooksViewModel> Books { get; set; }
+        public int BooksCount { get; set; }
+        public int AuthorsCount { get; set; }
+        public int ReviewsCount { get; set; }
     }
 }

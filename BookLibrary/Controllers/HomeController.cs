@@ -29,6 +29,10 @@ namespace BookLibrary.Controllers
 
             var books = homeService.HomePage(currentUserBooks);
 
+            model.AuthorsCount = books.AuthorsCount;
+            model.ReviewsCount = books.ReviewsCount;
+            model.BooksCount = books.BooksCount;
+
             model.Books = books.Books.Select(b => new AllBooksViewModel
             {
                 Id = b.Id,

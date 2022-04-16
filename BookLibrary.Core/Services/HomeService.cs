@@ -38,9 +38,17 @@ namespace BookLibrary.Core.Services
                 }
             }
 
+            var booksCount = data.Books.Where(x=>x.IsDeleted == false).Count();
+            var authorsCount = data.Authors.Where(a => a.Books.Any(b => b.IsDeleted == false)).Count();
+            var reviewsCount = data.Reviews.Count();
+
+
             return new HomePageBookServiceModel
             {
-                Books = books
+                Books = books,
+                BooksCount = booksCount,
+                AuthorsCount = authorsCount,
+                ReviewsCount = reviewsCount
             };
         }
     }

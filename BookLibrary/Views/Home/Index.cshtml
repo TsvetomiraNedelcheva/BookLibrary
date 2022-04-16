@@ -3,7 +3,26 @@
     ViewData["Title"] = "Home Page";
 }
 <h1 class="text-center">Welcome to Book Library</h1>
-<h4 class="text-center mb-3"><a asp-controller="Book" asp-action="All" style="color:black">Start browsing books from A to Z!</a></h4>
+<div class="row container mb-3 mt-4 text-center justify-content-center ml-5">
+        <div class="col-md-4">
+            <i class=" fa fa-solid fa-pen-nib mt-3 mb-3 fa-3x"></i>
+            <h5 class="font-weight-bold">Authors</h5>
+            <p class="font-weight-bold">We currently have @Model.AuthorsCount authors added on our website that you can search.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fa fa-solid fa-book-open mt-3 mb-3 fa-3x"></i>
+            <h5 class="font-weight-bold">Books</h5>
+            <p class="font-weight-bold">Browse through @Model.BooksCount books and pick your favourites to add to your list!</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fa fa-solid fa-users mt-3 mb-3 fa-3x"></i>
+            <h5 class="font-weight-bold">Reviews</h5>
+            <p class="font-weight-bold">You can check out @Model.ReviewsCount reviews left by our readers and post your own!</p>
+        </div>
+    </div>
+    <br />
+
+    <h4 class="text-center mb-3"><a asp-controller="Book" asp-action="All" style="color:black">Start browsing books from A to Z!</a></h4>
 <div class="container">
     <div class="row justify-content-center">
         @foreach (var book in Model.Books)
@@ -29,11 +48,9 @@
                             <button asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary btn-sm btn-block">Details</button>
                         </form>
 
-                        <br />
-
                         @if (book.IsAvailableToAddByUser)
                         {
-                            <form method="post">
+                            <form method="post" class="mt-1">
                                 <button asp-route-id="@book.Id" asp-controller="Book" asp-action="AddToMyBookList" type="submit" class="btn btn-primary btn-sm btn-block">Add to My Books </button>
                             </form>
                         }
