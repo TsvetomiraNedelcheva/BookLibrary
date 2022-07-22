@@ -3,6 +3,7 @@ using BookLibrary.Infrastructure.Data;
 using BookLibrary.Infrastructure.Data.Models;
 using BookLibrary.ModelBinders;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddControllersWithViews()
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(FormattingConstant.NormalDateFormat));
         options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     });
 
 builder.Services.AddApplicationServices(builder);
