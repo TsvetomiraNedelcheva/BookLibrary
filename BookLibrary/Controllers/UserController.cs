@@ -26,6 +26,9 @@ namespace BookLibrary.Controllers
             var user = await userManager.GetUserAsync(this.User);
             var books = userService.MyBooks( user , model.CurrentPage, MyBooksViewModel.BooksPerPage);
             model.TotalBooks = books.TotalBooks; 
+            model.UserName = user.UserName;
+            model.FisrtName = user.FisrtName;
+            model.LastName = user.LastName;
             model.Books = books.Books.Select(b => new BookServiceModel
             {
                 Id = b.Id,
