@@ -11,7 +11,7 @@ namespace BookLibrary.Models.Books
 
         [Required]
         [StringLength(MaxBookTitleLength, MinimumLength = MinBookTitleLength,
-            ErrorMessage = "The field must be between {2} and {1} characters.")]
+            ErrorMessage = "The field must be between {2} and {1} characters.")] 
         public string Title { get; set; }
         public string Image { get; set; }
         public bool IsDeleted { get; set; } 

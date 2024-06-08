@@ -21,7 +21,7 @@ namespace BookLibrary.Core.Services
             userManager = _userManager;
             cloudinary = _cloudinary;
         }
-        public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage,List<Book> currentUserBooks)
+        public BookQueryServiceModel All(string searchTerm, int currentPage, int booksPerPage, List<Book> currentUserBooks)
         {
             var bookQuery = this.data.Books.Where(b => b.IsDeleted == false).AsQueryable();
 
@@ -39,7 +39,7 @@ namespace BookLibrary.Core.Services
                 {
                     Id = b.Id,
                     Title = b.Title,
-                    Image = b.BookImage.RemoteImageUrl,                
+                    Image = b.BookImage.RemoteImageUrl
                 })
                 .ToList();
 
@@ -58,7 +58,7 @@ namespace BookLibrary.Core.Services
                 TotalBooks = totalBooks,
                 CurrentPage = currentPage,
                 BooksPerPage = booksPerPage,
-                Books = books                
+                Books = books
             };
         }
 
@@ -83,7 +83,7 @@ namespace BookLibrary.Core.Services
         public async Task RemoveFromBookList(string bookId, string userId)
         {
             var bookToRemove = await data.Books.FirstOrDefaultAsync(b => b.Id == bookId);
-            var user = await data.ApplicationUsers.Include(x=>x.Books).FirstOrDefaultAsync(a => a.Id == userId);
+            var user = await data.ApplicationUsers.Include(x => x.Books).FirstOrDefaultAsync(a => a.Id == userId);
             user.Books.Remove(bookToRemove);
             await data.SaveChangesAsync();
         }
@@ -133,7 +133,8 @@ namespace BookLibrary.Core.Services
         {
             var authorsNamesList = authorsInput.Split(","); //array of the names
 
-            var bookData = data.Books.Include(x=>x.Genres).FirstOrDefault(x => x.Id == id); //the book
+            var bookData = data.Books.Include(bi => bi.BookImage)
+                                     .Include(x => x.Genres).FirstOrDefault(x => x.Id == id); //the book
             var bookAuthors = data.Books.Where(x => x.Id == id).SelectMany(x => x.Authors).ToList(); //bookAuthors
 
             var authorsList = new List<Author>(); //list of authors to be mapped              
@@ -176,12 +177,12 @@ namespace BookLibrary.Core.Services
 
             var genresList = new List<Genre>();
             foreach (var editedGenre in genres)
-            {       
-                    var genreEnum = Enum.Parse<GenreType>(editedGenre);
-                    var newGenre = new Genre()
-                    {
-                        Name = genreEnum
-                    };
+            {
+                var genreEnum = Enum.Parse<GenreType>(editedGenre);
+                var newGenre = new Genre()
+                {
+                    Name = genreEnum
+                };
                 genresList.Add(newGenre);
             }
             genresList = genresList.Except(bookGenres).ToList();
@@ -208,12 +209,7 @@ namespace BookLibrary.Core.Services
             if (image != null)
             {
                 var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, image); //returns link of the image
-                bookData.BookImage = new BookImage
-                {
-                    Book = bookData,
-                    RemoteImageUrl = resultUrl,
-                    BookId = bookData.Id
-                };
+
                 bookData.BookImage.RemoteImageUrl = resultUrl;
             }
 
@@ -231,7 +227,6 @@ namespace BookLibrary.Core.Services
             var bookToDelete = data.Books.FirstOrDefault(b => b.Id == id);
             bookToDelete.IsDeleted = true;
             data.SaveChanges();
-
         }
 
         public BookDetailsServiceModel Details(string id)
@@ -247,7 +242,7 @@ namespace BookLibrary.Core.Services
                   Image = b.BookImage.RemoteImageUrl,
                   Authors = b.Authors.Select(x => x.Name.ToString()).ToList(),
                   Genres = b.Genres.Select(x => x.Name.ToString()).ToList(),
-                  Users = b.Reviews.Select(x=>x.User).ToList(),
+                  Users = b.Reviews.Select(x => x.User).ToList(),
                   Reviews = b.Reviews,
                   Publisher = b.Publisher.Name
               }).FirstOrDefault();
@@ -270,7 +265,7 @@ namespace BookLibrary.Core.Services
                 Pages = pages,
                 Publisher = new Publisher { Name = publisher },
                 Genres = genresList,
-            };       
+            };
 
             foreach (var inputAuthor in authors)
             {
@@ -286,8 +281,8 @@ namespace BookLibrary.Core.Services
                     {
                         RemoteImageUrl = resultUrl
                     };
-                   //await data.AuthorImages.AddAsync(author.AuthorImage);
-                   await data.Authors.AddAsync(author);
+                    //await data.AuthorImages.AddAsync(author.AuthorImage);
+                    await data.Authors.AddAsync(author);
                 }
 
                 newBook.Authors.Add(author);
@@ -304,8 +299,8 @@ namespace BookLibrary.Core.Services
                 };
             }
 
-           await data.Books.AddAsync(newBook);
-           await data.SaveChangesAsync();
+            await data.Books.AddAsync(newBook);
+            await data.SaveChangesAsync();
         }
 
         public void LeaveReview(string bookId, string userId, string content)
@@ -313,7 +308,7 @@ namespace BookLibrary.Core.Services
             var book = data.Books.Where(b => b.Id == bookId).FirstOrDefault();
             book.Reviews.Add(new Review
             {
-                BookId =book.Id,
+                BookId = book.Id,
                 UserId = userId,
                 Text = content
             });

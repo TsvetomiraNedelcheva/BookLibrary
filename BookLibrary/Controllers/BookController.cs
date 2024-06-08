@@ -97,7 +97,6 @@ namespace BookLibrary.Controllers
             {
                 Title = book.Title,
                 Description = book.Description,
-               // Image = book.Image,
                 Pages = book.Pages,
                 Authors = authorsString,
                 Publisher = book.Publisher,
