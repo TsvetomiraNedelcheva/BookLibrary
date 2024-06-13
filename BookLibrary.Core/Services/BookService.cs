@@ -273,15 +273,18 @@ namespace BookLibrary.Core.Services
                 if (author == null)
                 {
                     var resultUrl = await Cloud.Cloud.UploadAsync(this.cloudinary, inputAuthor.AuthorImage); //returns link of the image
+
                     author = new Author()
                     {
                         Name = inputAuthor.Name
                     };
+                   
                     author.AuthorImage = new AuthorImage()
                     {
                         RemoteImageUrl = resultUrl
                     };
-                    //await data.AuthorImages.AddAsync(author.AuthorImage);
+
+                    await data.AuthorImages.AddAsync(author.AuthorImage);
                     await data.Authors.AddAsync(author);
                 }
 
